@@ -1,4 +1,4 @@
-# 🎾 Badminton Court Booking Platform
+# ️🏸 Badminton Court Booking Platform
 
 Welcome to the Badminton Court Booking Platform! This project is built using ASP.NET Core Web API for the backend and Next.js Framework for the frontend. This README file provides an overview of the product, the technologies used, instructions for using GitHub, and important notes for cloning the project.
 

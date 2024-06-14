@@ -1,6 +1,6 @@
-# ️🏸 Badminton Court Booking Platform
+# 🎾 Badminton Court Booking Platform - Backend
 
-Welcome to the Badminton Court Booking Platform! This project is built using ASP.NET Core Web API for the backend and Next.js Framework for the frontend. This README file provides an overview of the product, the technologies used, instructions for using GitHub, and important notes for cloning the project.
+Welcome to the backend of the Badminton Court Booking Platform! This project is built using ASP.NET Core Web API. This README file provides an overview of the product, the technologies used, instructions for using GitHub, and important notes for cloning the project.
 
 ## 📚 Table of Contents
 - [Overview](#overview)
@@ -11,11 +11,10 @@ Welcome to the Badminton Court Booking Platform! This project is built using ASP
 - [License](#license)
 
 ## 🌟 Overview
-The Badminton Court Booking Platform is designed to streamline the process of booking badminton courts. Users can view available courts, book them, and manage their bookings all through an intuitive web interface.
+The Badminton Court Booking Platform backend is designed to handle API requests for booking badminton courts, managing users, and handling authentication and authorization.
 
 ## 🛠 Technologies Used
 - **Backend**: ASP.NET Core Web API
-- **Frontend**: Next.js
 - **Database**: SQL Server
 - **Authentication**: JWT (JSON Web Tokens)
 - **Hosting**: Azure
@@ -24,22 +23,17 @@ The Badminton Court Booking Platform is designed to streamline the process of bo
 
 ### Prerequisites
 - .NET 5.0 SDK or later
-- Node.js 14.x or later
 - SQL Server
 - Git
 
 ### Installation
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/badminton-court-booking.git
-    cd badminton-court-booking
+    git clone https://github.com/your-username/badminton-court-booking-backend.git
+    cd badminton-court-booking-backend
     ```
 
-2. **Backend Setup:**
-    - Navigate to the backend directory:
-      ```bash
-      cd backend
-      ```
+2. **Setup:**
     - Restore the .NET dependencies:
       ```bash
       dotnet restore
@@ -57,29 +51,9 @@ The Badminton Court Booking Platform is designed to streamline the process of bo
       dotnet run
       ```
 
-3. **Frontend Setup:**
-    - Navigate to the frontend directory:
-      ```bash
-      cd frontend
-      ```
-    - Install the Node.js dependencies:
-      ```bash
-      npm install
-      ```
-    - Create a `.env.local` file and add your backend API URL:
-      ```env
-      NEXT_PUBLIC_API_URL=http://localhost:5000
-      ```
-    - Run the frontend server:
-      ```bash
-      npm run dev
-      ```
-
 ## 📖 Usage
-1. Open your browser and navigate to `http://localhost:3000`.
-2. Register a new account or log in with existing credentials.
-3. View available badminton courts and book your preferred time slots.
-4. Manage your bookings from your user dashboard.
+1. The backend server will run at `http://localhost:5142`.
+2. You can use tools like Postman to test the API endpoints.
 
 ## 📝 Contributing
 We welcome contributions! Please follow these steps to contribute:
@@ -91,7 +65,7 @@ We welcome contributions! Please follow these steps to contribute:
 
 ## ⚠️ Important Notes
 - Ensure that your development environment meets the prerequisites mentioned above.
-- When cloning the project, update the `appsettings.json` and `.env.local` files with your local configurations.
+- When cloning the project, update the `appsettings.json` file with your local configurations.
 - For any issues or feature requests, please open an issue on GitHub.
 
 ## 📄 License

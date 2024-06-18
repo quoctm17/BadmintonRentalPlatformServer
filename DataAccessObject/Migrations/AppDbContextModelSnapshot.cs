@@ -17,7 +17,7 @@ namespace DataAccessObject.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.19")
+                .HasAnnotation("ProductVersion", "7.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -62,6 +62,8 @@ namespace DataAccessObject.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CourtOwnerId");
+
                     b.ToTable("BadmintonCourts");
                 });
 
@@ -79,8 +81,8 @@ namespace DataAccessObject.Migrations
                     b.Property<int>("CourtSlotId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -110,22 +112,22 @@ namespace DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentId")
+                    b.Property<int?>("PaymentEntityId")
                         .HasColumnType("int");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("PaymentEntityId");
 
                     b.HasIndex("UserId");
 
@@ -198,17 +200,18 @@ namespace DataAccessObject.Migrations
                     b.Property<int>("CourtNumberId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
 
-                    b.Property<int>("SlotId")
-                        .HasColumnType("int");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourtNumberId");
-
-                    b.HasIndex("SlotId");
 
                     b.ToTable("CourtSlots");
                 });
@@ -280,25 +283,6 @@ namespace DataAccessObject.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("BusinessObjects.SlotEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Slots");
-                });
-
             modelBuilder.Entity("BusinessObjects.TransactionEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -307,14 +291,17 @@ namespace DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookingId")
+                    b.Property<int?>("BookingReservationEntityId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("GrossAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("GrossAmount")
+                        .HasColumnType("real");
+
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -326,7 +313,9 @@ namespace DataAccessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookingId");
+                    b.HasIndex("BookingReservationEntityId");
+
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("Transactions");
                 });
@@ -415,6 +404,17 @@ namespace DataAccessObject.Migrations
                     b.ToTable("UserRoles");
                 });
 
+            modelBuilder.Entity("BusinessObjects.BadmintonCourtEntity", b =>
+                {
+                    b.HasOne("BusinessObjects.UserEntity", "CourtOwner")
+                        .WithMany()
+                        .HasForeignKey("CourtOwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourtOwner");
+                });
+
             modelBuilder.Entity("BusinessObjects.BookingDetailEntity", b =>
                 {
                     b.HasOne("BusinessObjects.BookingReservationEntity", "BookingReservation")
@@ -436,19 +436,15 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.BookingReservationEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.PaymentEntity", "Payment")
+                    b.HasOne("BusinessObjects.PaymentEntity", null)
                         .WithMany("BookingReservations")
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PaymentEntityId");
 
                     b.HasOne("BusinessObjects.UserEntity", "User")
                         .WithMany("BookingReservations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Payment");
 
                     b.Navigation("User");
                 });
@@ -491,15 +487,7 @@ namespace DataAccessObject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusinessObjects.SlotEntity", "Slot")
-                        .WithMany("CourtSlots")
-                        .HasForeignKey("SlotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Court");
-
-                    b.Navigation("Slot");
                 });
 
             modelBuilder.Entity("BusinessObjects.NotificationEntity", b =>
@@ -515,13 +503,17 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.TransactionEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.BookingReservationEntity", "BookingReservation")
+                    b.HasOne("BusinessObjects.BookingReservationEntity", null)
                         .WithMany("Transactions")
-                        .HasForeignKey("BookingId")
+                        .HasForeignKey("BookingReservationEntityId");
+
+                    b.HasOne("BusinessObjects.PaymentEntity", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BookingReservation");
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("BusinessObjects.UserRoleEntity", b =>
@@ -575,11 +567,6 @@ namespace DataAccessObject.Migrations
             modelBuilder.Entity("BusinessObjects.RoleEntity", b =>
                 {
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("BusinessObjects.SlotEntity", b =>
-                {
-                    b.Navigation("CourtSlots");
                 });
 
             modelBuilder.Entity("BusinessObjects.TypeOfCourtEntity", b =>

@@ -14,7 +14,7 @@ namespace BusinessObjects
 
         public int CourtSlotId { get; set; }
         public CourtSlotEntity CourtSlot { get; set; }
-        public decimal Price { get; set; }
+        public float Price { get; set; }
     }
 
 }

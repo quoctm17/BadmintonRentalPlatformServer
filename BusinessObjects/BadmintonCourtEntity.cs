@@ -17,7 +17,9 @@ namespace BusinessObjects
         public string Address { get; set; }
         public string Description { get; set; }
         public float Rating { get; set; }
+        
         public int CourtOwnerId { get; set; }
+        public virtual UserEntity CourtOwner { get; set; }
 
         public ICollection<CourtImageEntity> CourtImages { get; set; }
         public ICollection<CourtEntity> Courts { get; set; }

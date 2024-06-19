@@ -60,6 +60,44 @@ namespace BusinessObjects.Constants
                     public static string EmailExisted = Email + " đã tồn tại !!!";
                 }
             }
+            public static class BadmintonCourt
+            {
+                #region User Field
+                private const string BadmintonCourtMessage = "Badminton Court";
+                private const string CourtName = "Court name";
+                private const string CourtNumber = "Court number";
+                private const string StartTime = "Start time";
+                private const string EndTime = "End time";
+                private const string NumberOfCourt = "Number of court";
+                private const string Address = "Address";
+                private const string Description = "Description";
+                private const string CourtOwner = "Court owner";
+                #endregion
+                public static class Require
+                {
+                    public const string CourtNameRequired = CourtName + RequiredSuffix;
+                    public const string CourtNumberRequired = CourtNumber + RequiredSuffix;
+                    public const string StartTimeRequired = StartTime + RequiredSuffix;
+                    public const string EndTimeRequired = EndTime + RequiredSuffix;
+                    public const string NumberOfCourtRequired = NumberOfCourt + RequiredSuffix;
+                    public const string AddressRequired = Address + RequiredSuffix;
+                    public const string DescriptionRequired = Description + RequiredSuffix;
+                    public const string CourtOwnerRequired = CourtOwner + RequiredSuffix;
+                }
+                public static class Success
+                {
+                    public static string CreateBadmintonCourt = String.Format(CreateSuccessTemplate, BadmintonCourtMessage);
+                    public static string UpdateBadmintonCourt = String.Format(UpdateSuccessTemplate, BadmintonCourtMessage);
+                    public static string DeleteBadmintonCourt = String.Format(DeleteSuccessTemplate, BadmintonCourtMessage);
+                }
+                public static class Fail
+                {
+                    public static string CreateBadmintonCourt = String.Format(CreateFailTemplate, BadmintonCourtMessage);
+                    public static string UpdateBadmintonCourt = String.Format(UpdateFailTemplate, BadmintonCourtMessage);
+                    public static string DeleteBadmintonCourt = String.Format(DeleteFailTemplate, BadmintonCourtMessage);
+                    public static string NotFoundBadmintonCourt = String.Format(NotFoundTemplate, BadmintonCourtMessage);
+                }
+            }
         }
     }
 }

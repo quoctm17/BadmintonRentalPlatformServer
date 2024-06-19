@@ -27,5 +27,12 @@ namespace BusinessObjects.Constants
             /// <summary>"api/v1/users/{id}"</summary>
             public const string UserEndpoint = UsersEndpoint + ByIdRoute;
         }
+        public static class BadmintonCourt
+        {
+            /// <summary>"api/v1/badminton-courts"</summary>
+            public const string BadmintonCourtsEndpoint = ApiEndpoint + "/badminton-courts";
+            /// <summary>"api/v1/badminton-courts/{id}"</summary>
+            public const string BadmintonCourtEndpoint = BadmintonCourtsEndpoint + ByIdRoute;
+        }
     }
 }

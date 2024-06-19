@@ -1,6 +1,8 @@
 using BadmintonRentalPlatformAPI.Configuration;
+using BusinessObjects.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration.Get<AppConfig>() ?? new AppConfig();
 
 // Add services to the container.
 
@@ -15,6 +17,9 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add Configuration
+builder.Configuration.SettingsBinding();
 
 var app = builder.Build();
 

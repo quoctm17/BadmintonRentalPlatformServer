@@ -1,8 +1,13 @@
 ﻿using System.Text;
 using BadmintonRentalPlatformAPI.Configuration.Domain;
+using BusinessObjects.Commons;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Repositories;
+using Repositories.Interface;
+using Services;
+using Services.Interface;
 
 namespace BadmintonRentalPlatformAPI.Configuration;
 
@@ -10,12 +15,13 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddRepository(this IServiceCollection services)
     {
+        services.AddScoped<IUserRepository, UserRepository>();
         return services;
     }
 
     public static IServiceCollection AddService(this IServiceCollection services)
     {
-
+        services.AddScoped<IUserService, UserService>();
         return services;
     }
 
@@ -28,15 +34,15 @@ public static class DependencyInjection
         {
             options.TokenValidationParameters = new TokenValidationParameters()
             {
+                ValidIssuer = AppConfig.JwtSetting.ValidIssuer,
+                ValidateIssuer = AppConfig.JwtSetting.ValidateIssuer,
                 ValidateActor = true,
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                RequireExpirationTime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration.GetSection("Jwt:Issuer").Value,
-                ValidAudience = configuration.GetSection("Jwt:Audience").Value,
+                ValidateAudience = AppConfig.JwtSetting.ValidateAudience,
+                ValidAudience = AppConfig.JwtSetting.ValidAudience,
+                RequireExpirationTime = AppConfig.JwtSetting.RequireExpirationTime,
+                ValidateIssuerSigningKey = AppConfig.JwtSetting.ValidateIssuerSigningKey,
                 IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Jwt:Key").Value))
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfig.JwtSetting.SecretKey))
             };
         });
         return services;

@@ -32,5 +32,19 @@ namespace BadmintonRentalPlatformAPI.Controllers
             }
             return StatusCode((int)result.Item2.StatusCode, result.Item2);
         }
+
+        [HttpPut(ApiEndPointConstant.Authentication.RegisterEndPoint)]
+        [ProducesResponseType(typeof(Result<RegisterResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> OwnerRegister([FromBody] RegisterRequest request)
+        {
+            (Tuple<string, Guid>, Result<RegisterResponse>, UserEntity) result = await _userService.OwnerRegister(request);
+            if (result.Item2.Data != null)
+            {
+                var token = JwtUtil.GenerateJwtToken(result.Item3, result.Item1);
+                result.Item2.Data!.AccessToken = token;
+            }
+            return StatusCode((int)result.Item2.StatusCode, result.Item2);
+        }
     }
 }

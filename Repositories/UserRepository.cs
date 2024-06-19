@@ -21,20 +21,6 @@ namespace Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext? _dbContext = null;
-        private static UserRepository? _instance = null;
-
-        public static UserRepository Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new UserRepository();
-                }
-
-                return _instance;
-            }
-        }
 
         public UserRepository()
         {
@@ -81,18 +67,17 @@ namespace Repositories
                 PhoneNumber = request.PhoneNumber
             };
 
+            newUser.UserRoles = new List<UserRoleEntity>();
+
             try
             {
-                await _dbContext.Users.AddAsync(newUser);
-
-                UserRoleEntity newRole = new UserRoleEntity()
+                newUser.UserRoles.Add(new UserRoleEntity()
                 {
                     User = newUser,
                     RoleId = _dbContext.Roles.SingleOrDefault(x => x.RoleName.Equals("Owner"))!.Id,
-                };
+                });
 
-                await _dbContext.UserRoles.AddAsync(newRole);
-
+                await _dbContext.Users.AddAsync(newUser);
                 bool isSuccessful = await _dbContext.SaveChangesAsync() > 0;
                 if (!isSuccessful)
                 {

@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Interface;
+using Repositories.Mappings;
 using Services;
 using Services.Interface;
 
@@ -16,12 +17,14 @@ public static class DependencyInjection
     public static IServiceCollection AddRepository(this IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IBadmintonCourtRepository, BadmintonCourtRepository>();
         return services;
     }
 
     public static IServiceCollection AddService(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IBadmintonCourtService, BadmintonCourtService>();
         return services;
     }
 
@@ -56,7 +59,8 @@ public static class DependencyInjection
 
     public static IServiceCollection AddAutoMapper(this IServiceCollection services)
     {
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddAutoMapper(typeof(AutoMapperProfiles));
         return services;
     }
 

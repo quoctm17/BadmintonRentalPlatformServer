@@ -87,6 +87,11 @@ namespace DataAccessObject
                 .HasOne(cs => cs.Court)
                 .WithMany(c => c.CourtSlots)
                 .HasForeignKey(cs => cs.CourtNumberId);
+
+            modelBuilder.Entity<BadmintonCourtEntity>()
+               .HasOne(bc => bc.CourtOwner)
+               .WithMany(u => u.BadmintonCourts)
+               .HasForeignKey(bc => bc.CourtOwnerId);
         }
 
     }

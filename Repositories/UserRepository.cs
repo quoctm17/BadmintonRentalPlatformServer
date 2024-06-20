@@ -1,6 +1,8 @@
-﻿using BusinessObjects;
+﻿using AutoMapper;
+using BusinessObjects;
 using BusinessObjects.Constants;
 using BusinessObjects.Enums;
+using BusinessObjects.Helpers;
 using DataAccessObject;
 using DTOs;
 using DTOs.Request.Authentication;
@@ -21,21 +23,28 @@ namespace Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext? _dbContext = null;
+        private readonly IMapper _mapper = null;
 
-        public UserRepository()
+        public UserRepository(IMapper mapper)
         {
             _dbContext = new AppDbContext();
+            _mapper = mapper;
         }
 
         public async Task<(Tuple<string, Guid>, Result<LoginResponse>, UserEntity user)> Login(LoginRequest request)
         {
-            UserEntity? user = await _dbContext.Users.SingleOrDefaultAsync(x => x.Email.Equals(request.Email) && x.Password.Equals(request.Password));
+            UserEntity? user = await _dbContext.Users.
+                Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
+                .SingleOrDefaultAsync(x => x.Email.Equals(request.Email) && x.Password.Equals(request.Password) && x.UserRoles.Any(x => x.Role.RoleName.Equals("Owner")));
 
             if (user == null) return (null, new Result<LoginResponse>
             {
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = MessageConstant.Vi.User.Fail.NotFoundUser
             }, null)!;
+
+            var ownerRole = _dbContext.Roles.SingleOrDefault(x => x.RoleName.Equals("Owner"))!.RoleName;
 
             Tuple<string, Guid> guidClaim = null!;
             LoginResponse loginResponse = null!;
@@ -54,18 +63,9 @@ namespace Repositories
                 throw new Exception(MessageConstant.Vi.User.Fail.EmailExisted);
             }
 
-            UserEntity newUser = new UserEntity()
-            {
-                FullName = request.FullName,
-                Email = request.Email,
-                Gender = request.Gender,
-                DateOfBirth = request.DateOfBirth,
-                Address = request.Address,
-                Password = request.Password,
-                PasswordEncrypt = "123",
-                ProfileImage = request.ProfileImage,
-                PhoneNumber = request.PhoneNumber
-            };
+            UserEntity newUser = _mapper.Map<UserEntity>(request);
+            // Cant null so just hard code.
+            newUser.PasswordEncrypt = "123";
 
             newUser.UserRoles = new List<UserRoleEntity>();
 

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BusinessObjects;
+using DTOs.Request.Authentication;
 using DTOs.Request.BadmintonCourt;
+using DTOs.Response.Authentication;
 using DTOs.Response.BadmintonCourt;
 using System;
 using System.Collections.Generic;
@@ -14,8 +16,10 @@ namespace Repositories.Mappings
     {
         public AutoMapperProfiles()
         {
-            CreateMap<BadmintonCourtEntity, CreateBadmintonCourtRequest>().ReverseMap();
-            CreateMap<BadmintonCourtEntity, BadmintonCourtDto>().ReverseMap();
+            CreateMap<CreateBadmintonCourtRequest, BadmintonCourtEntity>();
+            CreateMap<BadmintonCourtEntity, BadmintonCourtDto>();
+            CreateMap<RegisterRequest, UserEntity>();
+            CreateMap<UserEntity, RegisterResponse>();
         }
 
     }

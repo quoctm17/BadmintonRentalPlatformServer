@@ -3,120 +3,140 @@
     "CourtCode": "C1",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 1,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-1.jpg"
   },
   {
     "CourtCode": "C2",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 1,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-2.jpg"
   },
   {
     "CourtCode": "C3",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 1,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-3.jpg"
   },
   {
     "CourtCode": "C4",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 1,
-    "Price" : 80000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-4.jpg"
   },
   {
     "CourtCode": "C5",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 1,
-    "Price" : 80000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-1.jpg"
   },
   {
     "CourtCode": "C1",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 2,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-2.jpg"
   },
   {
     "CourtCode": "C2",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 2,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-3.jpg"
   },
   {
     "CourtCode": "C3",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 2,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-4.jpg"
   },
   {
     "CourtCode": "C4",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 2,
-    "Price" : 80000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-1.jpg"
   },
   {
     "CourtCode": "C5",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 2,
-    "Price" : 80000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-2.jpg"
   },
   {
     "CourtCode": "C1",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 3,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-3.jpg"
   },
   {
     "CourtCode": "C2",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 3,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-4.jpg"
   },
   {
     "CourtCode": "C3",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 3,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-1.jpg"
   },
   {
     "CourtCode": "C4",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 3,
-    "Price" : 100000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-2.jpg"
   },
   {
     "CourtCode": "C5",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 3,
-    "Price" : 80000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-3.jpg"
   },
   {
     "CourtCode": "C1",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 4,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-4.jpg"
   },
   {
     "CourtCode": "C2",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 4,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-1.jpg"
   },
   {
     "CourtCode": "C3",
     "TypeOfCourtId": 1,
     "BadmintonCourtId": 4,
-    "Price" : 100000
+    "Price": 100000,
+    "CourtImage": "/img/room/room-2.jpg"
   },
   {
     "CourtCode": "C4",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 4,
-    "Price" : 80000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-3.jpg"
   },
   {
     "CourtCode": "C5",
     "TypeOfCourtId": 2,
     "BadmintonCourtId": 4,
-    "Price" : 80000
+    "Price": 80000,
+    "CourtImage": "/img/room/room-4.jpg"
   }
 ]

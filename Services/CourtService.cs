@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Repositories.Interface;
+using BusinessObjects;
 
 namespace Services
 {
@@ -23,5 +24,6 @@ namespace Services
         public Task<Result<CourtDto>> Create(CourtRequest request) => _repository.Create(request);
 
         public Task<Result<CourtDto>> GetById(int id) => _repository.GetById(id);
+        public Task<Result<List<CourtDetailDto>>> GetCourtsByBadmintonCourtId(int badmintonCourtId) => _repository.GetCourtsByBadmintonCourtId(badmintonCourtId);
     }
 }

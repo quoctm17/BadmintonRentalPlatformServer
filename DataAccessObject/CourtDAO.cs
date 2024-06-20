@@ -99,5 +99,50 @@ namespace DataAccessObject
                 };
             }
         }
+
+        public async Task<Result<List<CourtDetailDto>>> GetCourtsByBadmintonCourtId(int badmintonCourtId)
+        {
+            try
+            {
+                List<CourtEntity> courts = await _context.Courts
+                    .Where(c => c.BadmintonCourtId == badmintonCourtId)
+                    .Include(c => c.TypeOfCourt)
+                    .Include(c => c.BadmintonCourt)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                if (courts == null || courts.Count == 0)
+                {
+                    throw new Exception(MessageConstant.Vi.Court.Fail.NotFoundCourt);
+                }
+
+                var courtDetails = courts.Adapt<List<CourtDetailDto>>();
+
+                // Set the TypeOfCourtName for each CourtDetailDto
+                foreach (var courtDetail in courtDetails)
+                {
+                    var typeOfCourt = courts.FirstOrDefault(c => c.Id == courtDetail.Id)?.TypeOfCourt;
+                    if (typeOfCourt != null)
+                    {
+                        courtDetail.TypeOfCourtName = typeOfCourt.TypeName;
+                    }
+                }
+
+                return new Result<List<CourtDetailDto>>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = courtDetails
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Result<List<CourtDetailDto>>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Message = ex.Message
+                };
+            }
+        }
+
     }
 }

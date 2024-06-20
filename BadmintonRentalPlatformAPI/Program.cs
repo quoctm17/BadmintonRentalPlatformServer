@@ -24,6 +24,17 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:5135")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
+});
 
 // Add Configuration
 builder.Configuration.SettingsBinding();
@@ -42,12 +53,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseCors("AllowSpecificOrigins");
 app.UseAuthorization();
-app.UseCors(options =>
-    options.AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials()
-        .WithOrigins("http://localhost:3000", "http://localhost:8081"));
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
@@ -63,6 +70,7 @@ try
     await Seed.SeedTypeOfCourts(context);
     await Seed.SeedCourts(context);
     await Seed.SeedPayments(context);
+    await Seed.SeedCourtImages(context);
 
 }
 catch (Exception ex)

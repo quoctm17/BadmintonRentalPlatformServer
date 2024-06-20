@@ -17,8 +17,7 @@ namespace BusinessObjects
         public int BadmintonCourtId { get; set; }
         public BadmintonCourtEntity BadmintonCourt { get; set; }
         public float Price { get; set; }
-
-
+        public string CourtImage {  get; set; }
         public ICollection<CourtSlotEntity> CourtSlots { get; set; }
     }
 

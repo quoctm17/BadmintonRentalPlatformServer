@@ -33,6 +33,8 @@ namespace BusinessObjects.Constants
             public const string BadmintonCourtsEndpoint = ApiEndpoint + "/badminton-courts";
             /// <summary>"api/v1/badminton-courts/{id}"</summary>
             public const string BadmintonCourtEndpoint = BadmintonCourtsEndpoint + ByIdRoute;
+            /// <summary>"api/v1/badminton-courts/paging"</summary>
+            public const string BadmintonCourtsPagingEndpoint = BadmintonCourtsEndpoint + "/paging";
         }
         public static class TypeOfCourt
         {

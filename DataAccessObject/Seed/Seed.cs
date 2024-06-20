@@ -24,6 +24,22 @@ namespace DataAccessObject.Seed
             }
         }
 
+        public static async Task SeedCourtImages(AppDbContext _context)
+        {
+            if (!await _context.CourtImages.AnyAsync())
+            {
+                var imageData = await File.ReadAllTextAsync("../DataAccessObject/Seed/CourtImageSeed.json");
+                var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var images = JsonSerializer.Deserialize<List<CourtImageEntity>>(imageData, jsonOptions);
+
+                foreach (var image in images)
+                {
+                    await _context.CourtImages.AddAsync(image);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
         public static async Task SeedTypeOfCourts(AppDbContext _context)
         {
             if (!await _context.TypeOfCourts.AnyAsync())

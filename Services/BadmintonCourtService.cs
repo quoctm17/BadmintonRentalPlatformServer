@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs.Response.Page;
 
 namespace Services
 {
@@ -26,8 +27,10 @@ namespace Services
 
         public Task<Result<BadmintonCourtDto>> GetById(int id) => _repository.GetById(id);
 
+        public Task<Result<PagedResult<BadmintonCourtDto>>> GetPaging(int page, int size) => _repository.GetPaging(page, size);
+
         public Task<Result<BadmintonCourtDto>> Update(UpdateBadmintonCourtRequest request) => _repository.Update(request);
 
-        Task<Result<List<BadmintonCourtDto>>> IBadmintonCourtService.GetList() => _repository.GetList();
+        public Task<Result<List<BadmintonCourtDto>>> GetList() => _repository.GetList();
     }
 }

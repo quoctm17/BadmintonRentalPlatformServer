@@ -2,12 +2,8 @@
 using DTOs.Response.Court;
 using DTOs;
 using Repositories.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataAccessObject;
+using BusinessObjects;
 
 namespace Repositories
 {
@@ -16,7 +12,7 @@ namespace Repositories
         public CourtRepository() { }
 
         public Task<Result<CourtDto>> Create(CourtRequest request) => CourtDAO.Instance.Create(request);
-
         public Task<Result<CourtDto>> GetById(int id) => CourtDAO.Instance.GetById(id);
+        public Task<Result<List<CourtDetailDto>>> GetCourtsByBadmintonCourtId(int badmintonCourtId) => CourtDAO.Instance.GetCourtsByBadmintonCourtId(badmintonCourtId);
     }
 }

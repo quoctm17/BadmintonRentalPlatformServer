@@ -1,6 +1,8 @@
 ﻿using BusinessObjects;
 using DTOs;
+using DTOs.Request.AuthenPlayer;
 using DTOs.Request.Authentication;
+using DTOs.Response.AuthenPlayer;
 using DTOs.Response.Authentication;
 using Microsoft.Extensions.Logging;
 using Repositories.Interface;
@@ -26,5 +28,9 @@ namespace Services
         public Task<(Tuple<string, Guid>, Result<LoginResponse>, UserEntity user)> Login(LoginRequest request) => _repository.Login(request);
 
         public Task<(Tuple<string, Guid>, Result<RegisterResponse>, UserEntity user)> OwnerRegister(RegisterRequest request) => _repository.OwnerRegister(request);
+
+        public Task<(Tuple<string, Guid>, Result<PlayerLoginResponse>, UserEntity user)> PlayerLogin(PlayerLoginRequest request) => _repository.PlayerLogin(request);
+
+        public Task<(Tuple<string, Guid>, Result<PlayerRegisterResponse>, UserEntity user)> PlayerRegister(PlayerRegisterRequest request) => _repository.PlayerRegister(request);
     }
 }

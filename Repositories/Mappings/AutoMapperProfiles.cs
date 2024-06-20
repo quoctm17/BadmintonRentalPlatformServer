@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BusinessObjects;
+using DTOs.Request.AuthenPlayer;
 using DTOs.Request.Authentication;
 using DTOs.Request.BadmintonCourt;
+using DTOs.Response.AuthenPlayer;
 using DTOs.Response.Authentication;
 using DTOs.Response.BadmintonCourt;
 using System;
@@ -18,8 +20,12 @@ namespace Repositories.Mappings
         {
             CreateMap<CreateBadmintonCourtRequest, BadmintonCourtEntity>();
             CreateMap<BadmintonCourtEntity, BadmintonCourtDto>();
+
             CreateMap<RegisterRequest, UserEntity>();
             CreateMap<UserEntity, RegisterResponse>();
+
+            CreateMap<PlayerRegisterRequest, UserEntity>();
+            CreateMap<UserEntity, PlayerRegisterResponse>();
         }
 
     }

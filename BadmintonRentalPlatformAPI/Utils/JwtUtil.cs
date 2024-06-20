@@ -21,7 +21,7 @@ namespace BadmintonRentalPlatformAPI.Utils
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    /*new Claim(ClaimTypes.Role, user.Role.RoleName),*/
+                //new Claim(ClaimTypes.Role, user.Role.RoleName),
             };
             if (guidClaim != null) claims.Add(new Claim(guidClaim.Item1, guidClaim.Item2.ToString()));
             /*var expires = user.Role.RoleName.Equals(RoleEnum.User.GetDescriptionFromEnum())

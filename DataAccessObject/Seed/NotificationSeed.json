@@ -1,0 +1,14 @@
+[
+  {
+    "NotificationContent": "Welcome to our service!",
+    "Timestamp": "2023-01-01T10:00:00",
+    "NotificationType": "Info",
+    "UserId": 1
+  },
+  {
+    "NotificationContent": "Your booking has been confirmed.",
+    "Timestamp": "2023-02-01T12:00:00",
+    "NotificationType": "Booking",
+    "UserId": 2
+  }
+]

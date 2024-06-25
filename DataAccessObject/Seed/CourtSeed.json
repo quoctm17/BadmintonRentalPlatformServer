@@ -1,0 +1,102 @@
+[
+  {
+    "CourtCode": "C1",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 1
+  },
+  {
+    "CourtCode": "C2",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 1
+  },
+  {
+    "CourtCode": "C3",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 1
+  },
+  {
+    "CourtCode": "C4",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 1
+  },
+  {
+    "CourtCode": "C5",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 1
+  },
+  {
+    "CourtCode": "C1",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 2
+  },
+  {
+    "CourtCode": "C2",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 2
+  },
+  {
+    "CourtCode": "C3",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 2
+  },
+  {
+    "CourtCode": "C4",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 2
+  },
+  {
+    "CourtCode": "C5",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 2
+  },
+  {
+    "CourtCode": "C1",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 3
+  },
+  {
+    "CourtCode": "C2",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 3
+  },
+  {
+    "CourtCode": "C3",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 3
+  },
+  {
+    "CourtCode": "C4",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 3
+  },
+  {
+    "CourtCode": "C5",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 3
+  },
+  {
+    "CourtCode": "C1",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 4
+  },
+  {
+    "CourtCode": "C2",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 4
+  },
+  {
+    "CourtCode": "C3",
+    "TypeOfCourtId": 1,
+    "BadmintonCourtId": 4
+  },
+  {
+    "CourtCode": "C4",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 4
+  },
+  {
+    "CourtCode": "C5",
+    "TypeOfCourtId": 2,
+    "BadmintonCourtId": 4
+  }
+]

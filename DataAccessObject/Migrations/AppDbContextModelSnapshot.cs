@@ -391,13 +391,13 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.UserRoleEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "RoleId");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -518,15 +518,15 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.UserRoleEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.UserEntity", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BusinessObjects.RoleEntity", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessObjects.UserEntity", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

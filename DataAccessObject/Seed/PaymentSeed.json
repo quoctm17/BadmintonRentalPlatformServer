@@ -1,0 +1,10 @@
+[
+  {
+    "PaymentMethod": "Credit Card",
+    "PaymentStatus": "Available"
+  },
+  {
+    "PaymentMethod": "PayPal",
+    "PaymentStatus": "Unavailable"
+  }
+]

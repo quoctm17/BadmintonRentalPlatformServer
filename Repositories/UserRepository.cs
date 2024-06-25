@@ -27,9 +27,9 @@ namespace Repositories
         private readonly AppDbContext? _dbContext = null;
         private readonly IMapper _mapper = null;
 
-        public UserRepository(IMapper mapper)
+        public UserRepository(IMapper mapper, AppDbContext dbContext)
         {
-            _dbContext = new AppDbContext();
+            _dbContext = dbContext;
             _mapper = mapper;
         }
 

@@ -1,0 +1,134 @@
+[
+  {
+    "FullName": "John Doe",
+    "Email": "john.doe@example.com",
+    "Gender": "Male",
+    "DateOfBirth": "1990-01-01T00:00:00",
+    "Address": "123 Main St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "1234567890"
+  },
+  {
+    "FullName": "Jane Smith",
+    "Email": "jane.smith@example.com",
+    "Gender": "Female",
+    "DateOfBirth": "1992-02-02T00:00:00",
+    "Address": "456 Elm St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "0987654321"
+  },
+  {
+    "FullName": "Alice Johnson",
+    "Email": "alice.johnson@example.com",
+    "Gender": "Female",
+    "DateOfBirth": "1993-03-03T00:00:00",
+    "Address": "789 Oak St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "1122334455"
+  },
+  {
+    "FullName": "Bob Brown",
+    "Email": "bob.brown@example.com",
+    "Gender": "Male",
+    "DateOfBirth": "1994-04-04T00:00:00",
+    "Address": "321 Pine St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "5566778899"
+  },
+  {
+    "FullName": "Charlie Davis",
+    "Email": "charlie.davis@example.com",
+    "Gender": "Male",
+    "DateOfBirth": "1995-05-05T00:00:00",
+    "Address": "654 Maple St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "6677889900"
+  },
+  {
+    "FullName": "Daisy Evans",
+    "Email": "daisy.evans@example.com",
+    "Gender": "Female",
+    "DateOfBirth": "1996-06-06T00:00:00",
+    "Address": "987 Cedar St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "7788990011"
+  },
+  {
+    "FullName": "Edward Fox",
+    "Email": "edward.fox@example.com",
+    "Gender": "Male",
+    "DateOfBirth": "1997-07-07T00:00:00",
+    "Address": "123 Birch St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "8899001122"
+  },
+  {
+    "FullName": "Fiona Green",
+    "Email": "fiona.green@example.com",
+    "Gender": "Female",
+    "DateOfBirth": "1998-08-08T00:00:00",
+    "Address": "456 Ash St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "9900112233"
+  },
+  {
+    "FullName": "George Harris",
+    "Email": "george.harris@example.com",
+    "Gender": "Male",
+    "DateOfBirth": "1989-09-09T00:00:00",
+    "Address": "789 Willow St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "1011121314"
+  },
+  {
+    "FullName": "Hannah Ives",
+    "Email": "hannah.ives@example.com",
+    "Gender": "Female",
+    "DateOfBirth": "1990-10-10T00:00:00",
+    "Address": "321 Elm St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "1213141516"
+  },
+  {
+    "FullName": "Ian Johnson",
+    "Email": "ian.johnson@example.com",
+    "Gender": "Male",
+    "DateOfBirth": "1991-11-11T00:00:00",
+    "Address": "654 Pine St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "1314151617"
+  },
+  {
+    "FullName": "Julia King",
+    "Email": "julia.king@example.com",
+    "Gender": "Female",
+    "DateOfBirth": "1992-12-12T00:00:00",
+    "Address": "987 Oak St",
+    "Password": "password",
+    "PasswordEncrypt": "encrypted_password",
+    "ProfileImage": "path/to/image",
+    "PhoneNumber": "1415161718"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "CourtName": "Galaxy",
+    "CourtNumber": 5,
+    "StartTime": "07:00:00",
+    "EndTime": "22:00:00",
+    "NumberOfCourt": 5,
+    "Address": "123 Galaxy St",
+    "Description": "Galaxy Badminton Court",
+    "Rating": 4.5,
+    "CourtOwnerId": 5
+  },
+  {
+    "CourtName": "Starlight",
+    "CourtNumber": 4,
+    "StartTime": "07:00:00",
+    "EndTime": "22:00:00",
+    "NumberOfCourt": 4,
+    "Address": "456 Starlight St",
+    "Description": "Starlight Badminton Court",
+    "Rating": 4.2,
+    "CourtOwnerId": 6
+  },
+  {
+    "CourtName": "Sunshine",
+    "CourtNumber": 6,
+    "StartTime": "07:00:00",
+    "EndTime": "22:00:00",
+    "NumberOfCourt": 6,
+    "Address": "789 Sunshine St",
+    "Description": "Sunshine Badminton Court",
+    "Rating": 4.8,
+    "CourtOwnerId": 7
+  },
+  {
+    "CourtName": "Moonlight",
+    "CourtNumber": 3,
+    "StartTime": "07:00:00",
+    "EndTime": "22:00:00",
+    "NumberOfCourt": 3,
+    "Address": "321 Moonlight St",
+    "Description": "Moonlight Badminton Court",
+    "Rating": 4.0,
+    "CourtOwnerId": 8
+  }
+]

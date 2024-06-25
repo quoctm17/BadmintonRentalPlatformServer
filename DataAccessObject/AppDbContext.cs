@@ -37,12 +37,12 @@ namespace DataAccessObject
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserRoleEntity>()
-                .HasKey(ur => new { ur.Id, ur.RoleId });
+                .HasKey(ur => new { ur.UserId, ur.RoleId });
 
             modelBuilder.Entity<UserRoleEntity>()
                 .HasOne(ur => ur.User)
                 .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.Id);
+                .HasForeignKey(ur => ur.UserId);
 
             modelBuilder.Entity<UserRoleEntity>()
                 .HasOne(ur => ur.Role)

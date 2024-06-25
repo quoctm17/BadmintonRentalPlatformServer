@@ -15,9 +15,9 @@ namespace Repositories
         private readonly AppDbContext? _dbContext = null;
         private readonly IMapper _mapper = null;
 
-        public BadmintonCourtRepository(IMapper mapper)
+        public BadmintonCourtRepository(AppDbContext dbContext, IMapper mapper)
         {
-            _dbContext = new AppDbContext();
+            _dbContext = dbContext;
             _mapper = mapper;
         }
 

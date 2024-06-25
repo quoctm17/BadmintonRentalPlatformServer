@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.Get<AppConfig>() ?? new AppConfig();
 
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -23,6 +24,11 @@ builder.Services.AddSwaggerGen();
 
 // Add Configuration
 builder.Configuration.SettingsBinding();
+
+// Register AppDbContext
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

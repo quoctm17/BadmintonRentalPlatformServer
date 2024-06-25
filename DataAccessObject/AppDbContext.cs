@@ -6,6 +6,10 @@ namespace DataAccessObject
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<UserRoleEntity> UserRoles { get; set; }
         public DbSet<UserEntity> Users { get; set; }

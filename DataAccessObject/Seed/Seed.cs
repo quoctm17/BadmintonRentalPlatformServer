@@ -11,7 +11,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.BadmintonCourts.AnyAsync())
             {
-                var courtData = await File.ReadAllTextAsync("../DataAccess/Seed/BadmintonCourtSeed.json");
+                var courtData = await File.ReadAllTextAsync("../DataAccessObject/Seed/BadmintonCourtSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var courts = JsonSerializer.Deserialize<List<BadmintonCourtEntity>>(courtData, jsonOptions);
 
@@ -28,7 +28,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.TypeOfCourts.AnyAsync())
             {
-                var typeData = await File.ReadAllTextAsync("../DataAccess/Seed/TypeOfCourtSeed.json");
+                var typeData = await File.ReadAllTextAsync("../DataAccessObject/Seed/TypeOfCourtSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var types = JsonSerializer.Deserialize<List<TypeOfCourtEntity>>(typeData, jsonOptions);
 
@@ -45,7 +45,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.Courts.AnyAsync())
             {
-                var courtData = await File.ReadAllTextAsync("../DataAccess/Seed/CourtSeed.json");
+                var courtData = await File.ReadAllTextAsync("../DataAccessObject/Seed/CourtSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var courts = JsonSerializer.Deserialize<List<CourtEntity>>(courtData, jsonOptions);
 
@@ -63,7 +63,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.Users.AnyAsync())
             {
-                var userData = await File.ReadAllTextAsync("../DataAccess/Seed/UserSeed.json");
+                var userData = await File.ReadAllTextAsync("../DataAccessObject/Seed/UserSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var users = JsonSerializer.Deserialize<List<UserEntity>>(userData, jsonOptions);
 
@@ -80,7 +80,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.Payments.AnyAsync())
             {
-                var paymentData = await File.ReadAllTextAsync("../DataAccess/Seed/PaymentSeed.json");
+                var paymentData = await File.ReadAllTextAsync("../DataAccessObject/Seed/PaymentSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var payments = JsonSerializer.Deserialize<List<PaymentEntity>>(paymentData, jsonOptions);
 
@@ -97,7 +97,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.Roles.AnyAsync())
             {
-                var roleData = await File.ReadAllTextAsync("../DataAccess/Seed/RoleSeed.json");
+                var roleData = await File.ReadAllTextAsync("../DataAccessObject/Seed/RoleSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var roles = JsonSerializer.Deserialize<List<RoleEntity>>(roleData, jsonOptions);
 
@@ -114,7 +114,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.UserRoles.AnyAsync())
             {
-                var userRoleData = await File.ReadAllTextAsync("../DataAccess/Seed/UserRoleSeed.json");
+                var userRoleData = await File.ReadAllTextAsync("../DataAccessObject/Seed/UserRoleSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var userRoles = JsonSerializer.Deserialize<List<UserRoleEntity>>(userRoleData, jsonOptions);
 
@@ -131,7 +131,7 @@ namespace DataAccessObject.Seed
         {
             if (!await _context.Notifications.AnyAsync())
             {
-                var notificationData = await File.ReadAllTextAsync("../DataAccess/Seed/NotificationSeed.json");
+                var notificationData = await File.ReadAllTextAsync("../DataAccessObject/Seed/NotificationSeed.json");
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var notifications = JsonSerializer.Deserialize<List<NotificationEntity>>(notificationData, jsonOptions);
 

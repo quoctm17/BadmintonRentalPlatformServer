@@ -18,7 +18,6 @@ namespace DataAccessObject
         public DbSet<BadmintonCourtEntity> BadmintonCourts { get; set; }
         public DbSet<TypeOfCourtEntity> TypeOfCourts { get; set; }
         public DbSet<CourtEntity> Courts { get; set; }
-        public DbSet<SlotEntity> Slots { get; set; }
         public DbSet<CourtSlotEntity> CourtSlots { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -54,20 +53,10 @@ namespace DataAccessObject
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(n => n.UserId);
 
-            modelBuilder.Entity<TransactionEntity>()
-                .HasOne(t => t.BookingReservation)
-                .WithMany(br => br.Transactions)
-                .HasForeignKey(t => t.BookingId);
-
             modelBuilder.Entity<BookingReservationEntity>()
                 .HasOne(br => br.User)
                 .WithMany(u => u.BookingReservations)
                 .HasForeignKey(br => br.UserId);
-
-            modelBuilder.Entity<BookingReservationEntity>()
-                .HasOne(br => br.Payment)
-                .WithMany(p => p.BookingReservations)
-                .HasForeignKey(br => br.PaymentId);
 
             modelBuilder.Entity<BookingDetailEntity>()
                 .HasOne(bd => bd.BookingReservation)
@@ -99,10 +88,10 @@ namespace DataAccessObject
                 .WithMany(c => c.CourtSlots)
                 .HasForeignKey(cs => cs.CourtNumberId);
 
-            modelBuilder.Entity<CourtSlotEntity>()
-                .HasOne(cs => cs.Slot)
-                .WithMany(s => s.CourtSlots)
-                .HasForeignKey(cs => cs.SlotId);
+            modelBuilder.Entity<BadmintonCourtEntity>()
+               .HasOne(bc => bc.CourtOwner)
+               .WithMany(u => u.BadmintonCourts)
+               .HasForeignKey(bc => bc.CourtOwnerId);
         }
 
     }

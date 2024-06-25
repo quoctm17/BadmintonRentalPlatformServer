@@ -12,11 +12,11 @@ namespace BusinessObjects
 
         public int CourtNumberId { get; set; }
         public CourtEntity Court { get; set; }
+        
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
-        public int SlotId { get; set; }
-        public SlotEntity Slot { get; set; }
-
-        public decimal Price { get; set; }
+        public float Price { get; set; }
 
         public ICollection<BookingDetailEntity> BookingDetails { get; set; }
     }

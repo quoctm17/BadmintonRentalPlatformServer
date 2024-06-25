@@ -1,14 +1,15 @@
-﻿using System;
+﻿using BusinessObjects.Constants;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObjects
+namespace DTOs.Response.BadmintonCourt
 {
-    public class BadmintonCourtEntity
+    public class BadmintonCourtDto
     {
-        public int Id { get; set; }
         public string CourtName { get; set; }
         public int CourtNumber { get; set; }
         public TimeSpan StartTime { get; set; }
@@ -17,12 +18,6 @@ namespace BusinessObjects
         public string Address { get; set; }
         public string Description { get; set; }
         public float Rating { get; set; }
-        
         public int CourtOwnerId { get; set; }
-        public virtual UserEntity CourtOwner { get; set; }
-
-        public ICollection<CourtImageEntity> CourtImages { get; set; }
-        public ICollection<CourtEntity> Courts { get; set; }
     }
-
 }

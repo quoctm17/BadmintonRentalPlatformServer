@@ -15,11 +15,8 @@ namespace BusinessObjects
         public DateTime CreateAt { get; set; }
         public string BookingStatus { get; set; }
         public string PaymentStatus { get; set; }
-        public decimal TotalPrice { get; set; }
+        public float TotalPrice { get; set; }
         public string Notes { get; set; }
-
-        public int PaymentId { get; set; }
-        public PaymentEntity Payment { get; set; }
 
         public ICollection<TransactionEntity> Transactions { get; set; }
         public ICollection<BookingDetailEntity> BookingDetails { get; set; }

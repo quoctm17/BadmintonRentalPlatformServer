@@ -9,12 +9,13 @@ namespace BusinessObjects
     public class TransactionEntity
     {
         public int Id { get; set; }
-        public int BookingId { get; set; }
-        public BookingReservationEntity BookingReservation { get; set; }
-        public decimal GrossAmount { get; set; }
+        public float GrossAmount { get; set; }
         public string Type { get; set; }
         public DateTime CreateAt { get; set; }
         public string Status { get; set; }
+        
+        public int PaymentId { get; set; }
+        public PaymentEntity Payment { get; set; }
     }
 
 }

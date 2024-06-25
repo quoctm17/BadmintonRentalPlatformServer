@@ -58,47 +58,6 @@ namespace DataAccessObject.Seed
             }
         }
 
-        public static async Task SeedSlots(AppDbContext _context)
-        {
-            if (!await _context.Slots.AnyAsync())
-            {
-                var slotData = await File.ReadAllTextAsync("../DataAccess/Seed/SlotSeed.json");
-                var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var slots = JsonSerializer.Deserialize<List<SlotEntity>>(slotData, jsonOptions);
-
-                foreach (var slot in slots)
-                {
-                    await _context.Slots.AddAsync(slot);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public static async Task SeedCourtSlots(AppDbContext _context)
-        {
-            if (!await _context.CourtSlots.AnyAsync())
-            {
-                var courts = await _context.Courts.ToListAsync();
-                var slots = await _context.Slots.ToListAsync();
-
-                foreach (var court in courts)
-                {
-                    foreach (var slot in slots)
-                    {
-                        var courtSlot = new CourtSlotEntity
-                        {
-                            CourtNumberId = court.Id,
-                            SlotId = slot.Id,
-                            Price = 100 // Set your desired price
-                        };
-                        await _context.CourtSlots.AddAsync(courtSlot);
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-            }
-        }
 
         public static async Task SeedUsers(AppDbContext _context)
         {

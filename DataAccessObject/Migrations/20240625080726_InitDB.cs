@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessObject.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -111,11 +111,17 @@ namespace DataAccessObject.Migrations
                     BookingStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalPrice = table.Column<float>(type: "real", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BookingReservations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookingReservations_Payments_PaymentEntityId",
+                        column: x => x.PaymentEntityId,
+                        principalTable: "Payments",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_BookingReservations_Users_UserId",
                         column: x => x.UserId,
@@ -266,8 +272,7 @@ namespace DataAccessObject.Migrations
                         name: "FK_CourtSlots_Courts_CourtNumberId",
                         column: x => x.CourtNumberId,
                         principalTable: "Courts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -293,8 +298,7 @@ namespace DataAccessObject.Migrations
                         name: "FK_BookingDetails_CourtSlots_CourtSlotId",
                         column: x => x.CourtSlotId,
                         principalTable: "CourtSlots",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -311,6 +315,11 @@ namespace DataAccessObject.Migrations
                 name: "IX_BookingDetails_CourtSlotId",
                 table: "BookingDetails",
                 column: "CourtSlotId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookingReservations_PaymentEntityId",
+                table: "BookingReservations",
+                column: "PaymentEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookingReservations_UserId",

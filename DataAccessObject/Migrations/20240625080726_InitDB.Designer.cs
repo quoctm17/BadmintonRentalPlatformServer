@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessObject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<<< HEAD:DataAccessObject/Migrations/20240625064106_InitDB.Designer.cs
-    [Migration("20240625064106_InitDB")]
+    [Migration("20240625080726_InitDB")]
     partial class InitDB
-========
-    [Migration("20240618195752_Initial")]
-    partial class Initial
->>>>>>>> 569d9f56bd3a668ec4b3955a536f70f943538ecb:DataAccessObject/Migrations/20240618195752_Initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -415,7 +410,7 @@ namespace DataAccessObject.Migrations
             modelBuilder.Entity("BusinessObjects.BadmintonCourtEntity", b =>
                 {
                     b.HasOne("BusinessObjects.UserEntity", "CourtOwner")
-                        .WithMany()
+                        .WithMany("BadmintonCourts")
                         .HasForeignKey("CourtOwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -434,7 +429,7 @@ namespace DataAccessObject.Migrations
                     b.HasOne("BusinessObjects.CourtSlotEntity", "CourtSlot")
                         .WithMany("BookingDetails")
                         .HasForeignKey("CourtSlotId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("BookingReservation");
@@ -492,7 +487,7 @@ namespace DataAccessObject.Migrations
                     b.HasOne("BusinessObjects.CourtEntity", "Court")
                         .WithMany("CourtSlots")
                         .HasForeignKey("CourtNumberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Court");
@@ -584,6 +579,8 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.UserEntity", b =>
                 {
+                    b.Navigation("BadmintonCourts");
+
                     b.Navigation("BookingReservations");
 
                     b.Navigation("Notifications");

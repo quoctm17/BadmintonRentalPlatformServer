@@ -1,5 +1,8 @@
 using BadmintonRentalPlatformAPI.Configuration;
 using BusinessObjects.Commons;
+using DataAccessObject;
+using DataAccessObject.Seed;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.Get<AppConfig>() ?? new AppConfig();
@@ -37,5 +40,29 @@ app.UseCors(options =>
         .AllowCredentials()
         .WithOrigins("http://localhost:3000", "http://localhost:8081"));
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedRoles(context);
+    await Seed.SeedUsers(context);
+    await Seed.SeedUserRoles(context);
+    await Seed.SeedNotifications(context);
+    await Seed.SeedBadmintonCourts(context);
+    await Seed.SeedTypeOfCourts(context);
+    await Seed.SeedCourts(context);
+    await Seed.SeedPayments(context);
+
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred while seeding data");
+}
+
+
 
 app.Run();

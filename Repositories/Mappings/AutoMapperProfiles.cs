@@ -18,9 +18,18 @@ namespace Repositories.Mappings
     {
         public AutoMapperProfiles()
         {
+            BadmintonCourtMappingProfile();
+            AuthenticationMappingProfile();
+        }
+
+        private void BadmintonCourtMappingProfile()
+        {
             CreateMap<CreateBadmintonCourtRequest, BadmintonCourtEntity>();
             CreateMap<BadmintonCourtEntity, BadmintonCourtDto>();
+        }
 
+        private void AuthenticationMappingProfile()
+        {
             CreateMap<RegisterRequest, UserEntity>();
             CreateMap<UserEntity, RegisterResponse>();
 

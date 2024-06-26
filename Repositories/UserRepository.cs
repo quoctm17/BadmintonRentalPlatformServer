@@ -24,30 +24,22 @@ namespace Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly AppDbContext? _dbContext = null;
         private readonly IMapper _mapper = null;
 
-        public UserRepository(IMapper mapper, AppDbContext dbContext)
+        public UserRepository(IMapper mapper)
         {
-            _dbContext = dbContext;
             _mapper = mapper;
         }
 
         public async Task<(Tuple<string, Guid>, Result<LoginResponse>, UserEntity user)> Login(LoginRequest request)
         {
-            UserEntity? user = await _dbContext.Users.
-                Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-                .SingleOrDefaultAsync(x => x.Email.Equals(request.Email) && x.Password.Equals(request.Password) && x.UserRoles.Any(x => x.Role.RoleName.Equals("Owner")));
-
+            var user = await UserDAO.Instance.LoginOwner(request.Email, request.Password);
             if (user == null) return (null, new Result<LoginResponse>
             {
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = MessageConstant.Vi.User.Fail.NotFoundUser
             }, null)!;
-
-            var ownerRole = _dbContext.Roles.SingleOrDefault(x => x.RoleName.Equals("Owner"))!.RoleName;
-
+            
             Tuple<string, Guid> guidClaim = null!;
             LoginResponse loginResponse = null!;
 
@@ -58,7 +50,7 @@ namespace Repositories
 
         public async Task<(Tuple<string, Guid>, Result<RegisterResponse>, UserEntity user)> OwnerRegister(RegisterRequest request)
         {
-            var listUser = _dbContext.Users.Where(predicate: x => x.Email == request.Email);
+            var listUser = await UserDAO.Instance.GetUserByEmail(request.Email);
 
             if (listUser.Any())
             {
@@ -73,14 +65,14 @@ namespace Repositories
 
             try
             {
+                var role = await RoleDAO.Instance.GetRoleName("Owner");
                 newUser.UserRoles.Add(new UserRoleEntity()
                 {
                     User = newUser,
-                    RoleId = _dbContext.Roles.SingleOrDefault(x => x.RoleName.Equals("Owner"))!.Id,
+                    RoleId = role!.Id,
                 });
 
-                await _dbContext.Users.AddAsync(newUser);
-                bool isSuccessful = await _dbContext.SaveChangesAsync() > 0;
+                bool isSuccessful = await UserDAO.Instance.AddNewUser(newUser) > 0;
                 if (!isSuccessful)
                 {
                     throw new Exception(MessageConstant.Vi.User.Fail.CreateUser);
@@ -104,18 +96,12 @@ namespace Repositories
         }
         public async Task<(Tuple<string, Guid>, Result<PlayerLoginResponse>, UserEntity user)> PlayerLogin(PlayerLoginRequest request)
         {
-            UserEntity? user = await _dbContext.Users.
-                Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-                .SingleOrDefaultAsync(x => x.Email.Equals(request.Email) && x.Password.Equals(request.Password) && x.UserRoles.Any(x => x.Role.RoleName.Equals("Player")));
-
+            var user = await UserDAO.Instance.LoginPlayer(request.Email, request.Password);
             if (user == null) return (null, new Result<PlayerLoginResponse>
             {
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = MessageConstant.Vi.User.Fail.NotFoundUser
             }, null)!;
-
-            var ownerRole = _dbContext.Roles.SingleOrDefault(x => x.RoleName.Equals("Player"))!.RoleName;
 
             Tuple<string, Guid> guidClaim = null!;
             PlayerLoginResponse playerLoginResponse = null!;
@@ -126,7 +112,7 @@ namespace Repositories
         }
         public async Task<(Tuple<string, Guid>, Result<PlayerRegisterResponse>, UserEntity user)> PlayerRegister(PlayerRegisterRequest request)
         {
-            var listUser = _dbContext.Users.Where(predicate: x => x.Email == request.Email);
+            var listUser = await UserDAO.Instance.GetUserByEmail(request.Email);
 
             if (listUser.Any())
             {
@@ -145,14 +131,14 @@ namespace Repositories
 
             try
             {
+                var role = await RoleDAO.Instance.GetRoleName("Player");
                 newUser.UserRoles.Add(new UserRoleEntity()
                 {
                     User = newUser,
-                    RoleId = _dbContext.Roles.SingleOrDefault(x => x.RoleName.Equals("Player"))!.Id,
+                    RoleId = role!.Id,
                 });
 
-                await _dbContext.Users.AddAsync(newUser);
-                bool isSuccessful = await _dbContext.SaveChangesAsync() > 0;
+                bool isSuccessful = await UserDAO.Instance.AddNewUser(newUser) > 0;
                 if (!isSuccessful)
                 {
                     throw new Exception(MessageConstant.Vi.User.Fail.CreateUser);

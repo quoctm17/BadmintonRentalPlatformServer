@@ -27,8 +27,7 @@ namespace Repositories
             {
                 var newBadmintonCourt = _mapper.Map<BadmintonCourtEntity>(request);
 
-                await _dbContext.BadmintonCourts.AddAsync(newBadmintonCourt);
-                bool isSuccessful = await _dbContext.SaveChangesAsync() > 0;
+                bool isSuccessful = await BadmintonCourtDAO.Instance.CreateNewBadmintonCourt(newBadmintonCourt) > 0;
 
                 if (!isSuccessful)
                 {

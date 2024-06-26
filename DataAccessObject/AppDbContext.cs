@@ -6,6 +6,9 @@ namespace DataAccessObject
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext()
+        {
+        }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -29,12 +32,11 @@ namespace DataAccessObject
 
         private string GetConnectionString()
         {
-            IConfiguration config = new ConfigurationBuilder()
+            IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
                 .Build();
-            var strConn = config.GetConnectionString("DefaultConnectionString");
-            return strConn;
+            return configuration.GetConnectionString("DefaultConnectionString") ?? "";
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

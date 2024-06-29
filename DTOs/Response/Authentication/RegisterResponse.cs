@@ -10,6 +10,7 @@ namespace DTOs.Response.Authentication
     {
         public RegisterResponse(int id, string fullName, string email) : base(id, fullName, email)
         {
+
         }
     }
 }

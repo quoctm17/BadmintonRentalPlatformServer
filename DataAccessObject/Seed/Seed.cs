@@ -110,23 +110,6 @@ namespace DataAccessObject.Seed
             }
         }
 
-        public static async Task SeedUserRoles(AppDbContext _context)
-        {
-            if (!await _context.UserRoles.AnyAsync())
-            {
-                var userRoleData = await File.ReadAllTextAsync("../DataAccessObject/Seed/UserRoleSeed.json");
-                var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var userRoles = JsonSerializer.Deserialize<List<UserRoleEntity>>(userRoleData, jsonOptions);
-
-                foreach (var userRole in userRoles)
-                {
-                    await _context.UserRoles.AddAsync(userRole);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-        }
-
         public static async Task SeedNotifications(AppDbContext _context)
         {
             if (!await _context.Notifications.AnyAsync())

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace DTOs.Response.Authentication
         public int Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
+        public RoleEntity Role { get; set; }
 
         public LoginResponse(int id, string fullName, string email)
         {

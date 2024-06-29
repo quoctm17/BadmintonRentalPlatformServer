@@ -20,13 +20,6 @@ namespace BusinessObjects.Constants
             // <summary>"api/v1/google/login"</summary>
             public const string RegisterEndPoint = ApiEndpoint + "/register";
         }
-        public static class PlayerAuth
-        {
-            /// <summary>"api/v1/login"</summary>
-            public const string LoginEndPoint = ApiEndpoint + "/player-login";
-            // <summary>"api/v1/google/login"</summary>
-            public const string RegisterEndPoint = ApiEndpoint + "/player-register";
-        }
         public static class User
         {
             /// <summary>"api/v1/users"</summary>

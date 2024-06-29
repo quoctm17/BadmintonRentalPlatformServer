@@ -33,6 +33,7 @@ namespace BusinessObjects.Constants
                 private const string Password = "Password";
                 private const string ProfileImage = "Profile image";
                 private const string PhoneNumber = "Phone number";
+                private const string Role = "Role";
                 #endregion
                 public static class Require
                 {
@@ -44,6 +45,7 @@ namespace BusinessObjects.Constants
                     public const string PasswordRequired = Password + RequiredSuffix;
                     public const string PhoneNumberRequired = PhoneNumber + RequiredSuffix;
                     public const string ProfileImageRequired = ProfileImage + RequiredSuffix;
+                    public const string RoleRequired = Role + RequiredSuffix;
                 }
                 public static class Success
                 {

@@ -11,7 +11,7 @@ namespace BusinessObjects
         public int Id { get; set; }
         public string RoleName { get; set; }
 
-        public ICollection<UserRoleEntity> UserRoles { get; set; }
+        public virtual ICollection<UserEntity> Users { get; set; } = new List<UserEntity>();
     }
 
 }

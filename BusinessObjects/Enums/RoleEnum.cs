@@ -8,9 +8,9 @@ namespace BusinessObjects.Enums
 {
     public enum RoleEnum
     {
+        Player,
         Owner,
         Employee,
-        Player,
         Administrator
     }
 }

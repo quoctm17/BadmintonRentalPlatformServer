@@ -26,5 +26,7 @@ namespace DTOs.Request.Authentication
         public string ProfileImage { get; set; } = string.Empty;
         [Required(ErrorMessage = MessageConstant.Vi.User.Require.PhoneNumberRequired)]
         public string PhoneNumber { get; set; } = string.Empty;
+        [Required(ErrorMessage = MessageConstant.Vi.User.Require.RoleRequired)]
+        public int RoleId { get; set; }
     }
 }

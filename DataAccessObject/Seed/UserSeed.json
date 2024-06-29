@@ -8,7 +8,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "1234567890"
+    "PhoneNumber": "1234567890",
+    "RoleId":  "1"
   },
   {
     "FullName": "Jane Smith",
@@ -19,7 +20,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "0987654321"
+    "PhoneNumber": "0987654321",
+    "RoleId": "1"
   },
   {
     "FullName": "Alice Johnson",
@@ -30,7 +32,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "1122334455"
+    "PhoneNumber": "1122334455",
+    "RoleId": "1"
   },
   {
     "FullName": "Bob Brown",
@@ -41,7 +44,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "5566778899"
+    "PhoneNumber": "5566778899",
+    "RoleId": "1"
   },
   {
     "FullName": "Charlie Davis",
@@ -52,7 +56,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "6677889900"
+    "PhoneNumber": "6677889900",
+    "RoleId": "2"
   },
   {
     "FullName": "Daisy Evans",
@@ -63,7 +68,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "7788990011"
+    "PhoneNumber": "7788990011",
+    "RoleId": "2"
   },
   {
     "FullName": "Edward Fox",
@@ -74,7 +80,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "8899001122"
+    "PhoneNumber": "8899001122",
+    "RoleId": "2"
   },
   {
     "FullName": "Fiona Green",
@@ -85,7 +92,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "9900112233"
+    "PhoneNumber": "9900112233",
+    "RoleId": "2"
   },
   {
     "FullName": "George Harris",
@@ -96,7 +104,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "1011121314"
+    "PhoneNumber": "1011121314",
+    "RoleId": "2"
   },
   {
     "FullName": "Hannah Ives",
@@ -107,7 +116,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "1213141516"
+    "PhoneNumber": "1213141516",
+    "RoleId": "3"
   },
   {
     "FullName": "Ian Johnson",
@@ -118,7 +128,8 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "1314151617"
+    "PhoneNumber": "1314151617",
+    "RoleId": "3"
   },
   {
     "FullName": "Julia King",
@@ -129,6 +140,7 @@
     "Password": "password",
     "PasswordEncrypt": "encrypted_password",
     "ProfileImage": "path/to/image",
-    "PhoneNumber": "1415161718"
+    "PhoneNumber": "1415161718",
+    "RoleId": "4"
   }
 ]

@@ -1,7 +1,14 @@
 ﻿using System.Net;
 using BusinessObjects;
 using BusinessObjects.Constants;
+using DTOs.Request.Authentication;
+using DTOs.Response.Authentication;
+using DTOs;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Utils;
+using Mapster;
+using Azure.Core;
+using BusinessObjects.Exceptions;
 
 namespace DataAccessObject;
 
@@ -26,37 +33,72 @@ public class UserDAO
             return instance;
         }
     }
-    
-    public async Task<UserEntity?> LoginOwner(string email, string password)
+    public async Task<(Tuple<string, Guid>, Result<LoginResponse>, UserEntity user)> Login(LoginRequest request)
     {
-        return await _context.Users.
-            Include(user => user.UserRoles)
-            .ThenInclude(role => role.Role)
-            .SingleOrDefaultAsync(user => user.Email.Equals(email) && 
-                                          user.Password.Equals(password) && 
-                                          user.UserRoles.Any(role => role.Role.RoleName.Equals("Owner")));
-    }
-    
-    public async Task<UserEntity?> LoginPlayer(string email, string password)
-    {
-        return await _context.Users.
-            Include(user => user.UserRoles)
-            .ThenInclude(role => role.Role)
-            .SingleOrDefaultAsync(user => user.Email.Equals(email) && 
-                                          user.Password.Equals(password) && 
-                                          user.UserRoles.Any(role => role.Role.RoleName.Equals("Player")));
-    }
+        var user = await _context.Users.
+            Include(user => user.Role)
+            .SingleOrDefaultAsync(user => user.Email.Equals(request.Email) &&
+                                          user.Password.Equals(request.Password));
 
-    public async Task<int> AddNewUser(UserEntity user)
-    {
-        await _context.Users.AddAsync(user);
-        return await _context.SaveChangesAsync();
-    }
+        if (user == null) return (null, new Result<LoginResponse>
+        {
+            StatusCode = HttpStatusCode.BadRequest,
+            Message = MessageConstant.Vi.User.Fail.NotFoundUser
+        }, null)!;
 
-    public async Task<List<UserEntity>> GetUserByEmail(string email)
+        Tuple<string, Guid> guidClaim = null!;
+        LoginResponse loginResponse = null!;
+
+        loginResponse = new LoginResponse(user.Id, user.FullName, user.Email);
+
+        var token = JwtUtil.GenerateJwtToken(user, guidClaim);
+        loginResponse.AccessToken = token;
+
+        return (guidClaim, new Result<LoginResponse> { Data = loginResponse, StatusCode = HttpStatusCode.OK }, user);
+    }
+    public async Task<(Tuple<string, Guid>, Result<RegisterResponse>, UserEntity user)> Register(RegisterRequest request)
     {
-        return await _context.Users
-            .Where(user => user.Email.Equals(email))
+        var listUser = await _context.Users
+            .Where(user => user.Email.Equals(request.Email))
             .ToListAsync();
+
+        if (listUser.Any())
+        {
+            throw new BadRequestException(MessageConstant.Vi.User.Fail.EmailExisted);
+        }
+
+        UserEntity newUser = request.Adapt<UserEntity>();
+
+        newUser.PasswordEncrypt = "PasswordEncrypt";
+
+        try
+        {
+            await _context.Users.AddAsync(newUser);
+            bool isSuccessful = await _context.SaveChangesAsync() > 0;
+            if (!isSuccessful)
+            {
+                throw new Exception(MessageConstant.Vi.User.Fail.CreateUser);
+            }
+
+            newUser = await _context.Users.Include(x => x.Role).SingleOrDefaultAsync(predicate: x => x.Id.Equals(newUser.Id));
+
+            Tuple<string, Guid> guidClaim = null!;
+            RegisterResponse registerResponse = null!;
+
+            registerResponse = new RegisterResponse(newUser.Id, newUser.FullName, newUser.Email);
+
+            var token = JwtUtil.GenerateJwtToken(newUser, guidClaim);
+            registerResponse!.AccessToken = token;
+
+            return (guidClaim, new Result<RegisterResponse> { Data = registerResponse, StatusCode = HttpStatusCode.OK }, newUser);
+        }
+        catch (Exception ex)
+        {
+            return (null, new Result<RegisterResponse>
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                Message = ex.Message,
+            }, null)!;
+        }
     }
 }

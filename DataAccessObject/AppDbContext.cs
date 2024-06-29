@@ -14,7 +14,6 @@ namespace DataAccessObject
         }
 
         public DbSet<RoleEntity> Roles { get; set; }
-        public DbSet<UserRoleEntity> UserRoles { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<NotificationEntity> Notifications { get; set; }
         public DbSet<TransactionEntity> Transactions { get; set; }
@@ -41,20 +40,13 @@ namespace DataAccessObject
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserRoleEntity>()
-                .HasKey(ur => new { ur.UserId, ur.RoleId });
+            modelBuilder.Entity<UserEntity>().HasIndex(p => p.Email).IsUnique();
 
-            modelBuilder.Entity<UserRoleEntity>()
-    .HasOne(ur => ur.User)
-    .WithMany(u => u.UserRoles)
-    .HasForeignKey(ur => ur.UserId)
-    .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<UserRoleEntity>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(ur => ur.RoleId)
-                .OnDelete(DeleteBehavior.Cascade);
+            #region Entity Relation
+            modelBuilder.Entity<UserEntity>()
+               .HasOne(p => p.Role)
+               .WithMany(d => d.Users)
+               .HasForeignKey(p => p.RoleId);
 
             modelBuilder.Entity<NotificationEntity>()
                 .HasOne(n => n.User)
@@ -109,6 +101,7 @@ namespace DataAccessObject
                .WithMany(u => u.BadmintonCourts)
                .HasForeignKey(bc => bc.CourtOwnerId)
                .OnDelete(DeleteBehavior.Cascade);
+            #endregion
         }
 
     }

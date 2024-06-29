@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +20,10 @@ namespace BusinessObjects
         public string ProfileImage { get; set; }
         public string PhoneNumber { get; set; }
 
+        public int RoleId { get; set; }
+        public virtual RoleEntity Role { get; set; } = null!;
+
         public ICollection<BadmintonCourtEntity> BadmintonCourts { get; set; } = new List<BadmintonCourtEntity>();
-        public ICollection<UserRoleEntity> UserRoles { get; set; }
         public ICollection<NotificationEntity> Notifications { get; set; }
         public ICollection<BookingReservationEntity> BookingReservations { get; set; }
     }

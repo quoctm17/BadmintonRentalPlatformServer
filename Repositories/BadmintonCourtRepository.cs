@@ -12,43 +12,10 @@ namespace Repositories
 {
     public class BadmintonCourtRepository : IBadmintonCourtRepository
     {
-        private readonly AppDbContext? _dbContext = null;
-        private readonly IMapper _mapper = null;
-
-        public BadmintonCourtRepository(AppDbContext dbContext, IMapper mapper)
+        public BadmintonCourtRepository()
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
         }
 
-        public async Task<Result<BadmintonCourtDto>> Create(CreateBadmintonCourtRequest request)
-        {
-            try
-            {
-                var newBadmintonCourt = _mapper.Map<BadmintonCourtEntity>(request);
-
-                bool isSuccessful = await BadmintonCourtDAO.Instance.CreateNewBadmintonCourt(newBadmintonCourt) > 0;
-
-                if (!isSuccessful)
-                {
-                    throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.CreateBadmintonCourt);
-                }
-
-                return new Result<BadmintonCourtDto> {
-                    StatusCode = HttpStatusCode.OK,
-                    Data = _mapper.Map<BadmintonCourtDto>(newBadmintonCourt),
-                };
-            }
-            catch (Exception ex)
-            {
-                return new Result<BadmintonCourtDto>
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Message = ex.Message,
-                };
-            }
-        }
-
-
+        public Task<Result<BadmintonCourtDto>> Create(CreateBadmintonCourtRequest request) => BadmintonCourtDAO.Instance.Create(request);
     }
 }

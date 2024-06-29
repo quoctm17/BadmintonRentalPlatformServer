@@ -1,4 +1,5 @@
 using BadmintonRentalPlatformAPI.Configuration;
+using BadmintonRentalPlatformAPI.Middlewares;
 using BusinessObjects.Commons;
 using DataAccessObject;
 using DataAccessObject.Seed;
@@ -15,6 +16,7 @@ builder.Services.AddRepository();
 builder.Services.AddService();
 builder.Services.AddCloudinarySetting(builder.Configuration);
 builder.Services.AddAutoMapper();
+builder.Services.RegisterMapster();
 builder.Services.AddSeeding();
 builder.Services.AddSwaggerAuthorization();
 builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -38,7 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseAuthorization();
 app.UseCors(options =>
     options.AllowAnyHeader()
@@ -55,7 +57,6 @@ try
     await context.Database.MigrateAsync();
     await Seed.SeedRoles(context);
     await Seed.SeedUsers(context);
-    await Seed.SeedUserRoles(context);
     await Seed.SeedNotifications(context);
     await Seed.SeedBadmintonCourts(context);
     await Seed.SeedTypeOfCourts(context);

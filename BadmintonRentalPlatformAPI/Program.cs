@@ -4,6 +4,7 @@ using BusinessObjects.Commons;
 using DataAccessObject;
 using DataAccessObject.Seed;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.Get<AppConfig>() ?? new AppConfig();
@@ -11,7 +12,7 @@ var configuration = builder.Configuration.Get<AppConfig>() ?? new AppConfig();
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddRepository();
 builder.Services.AddService();
 builder.Services.AddCloudinarySetting(builder.Configuration);

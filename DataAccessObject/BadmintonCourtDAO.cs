@@ -35,13 +35,9 @@ public class BadmintonCourtDAO
     {
         try
         {
-            UserEntity user = _context.Users.SingleOrDefault(u => u.Id.Equals(request.CourtOwnerId));
-
-            if (user == null)
-            {
-                throw new BadRequestException(MessageConstant.Vi.User.Fail.NotFoundUser);
-            }
-
+            UserEntity? user = _context.Users.SingleOrDefault(u => u.Id.Equals(request.CourtOwnerId));
+            if (user == null) throw new BadRequestException(MessageConstant.Vi.User.Fail.NotFoundUser);
+            
             BadmintonCourtEntity newBadmintonCourt = request.Adapt<BadmintonCourtEntity>();
 
             await _context.BadmintonCourts.AddAsync(newBadmintonCourt);

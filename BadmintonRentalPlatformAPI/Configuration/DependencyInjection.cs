@@ -18,6 +18,9 @@ public static class DependencyInjection
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBadmintonCourtRepository, BadmintonCourtRepository>();
+        services.AddScoped<ITypeOfCourtRepository, TypeOfCourtRepository>();
+        services.AddScoped<ICourtRepository, CourtRepository>();
+        services.AddScoped<ICourtSlotRepository, CourtSlotRepository>();
         return services;
     }
 
@@ -25,6 +28,9 @@ public static class DependencyInjection
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBadmintonCourtService, BadmintonCourtService>();
+        services.AddScoped<ITypeOfCourtService, TypeOfCourtService>();
+        services.AddScoped<ICourtService, CourtService>();
+        services.AddScoped<ICourtSlotService, CourtSlotService>();
         return services;
     }
 

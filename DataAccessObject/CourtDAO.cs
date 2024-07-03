@@ -12,6 +12,7 @@ using DTOs.Request.Court;
 using Mapster;
 using BusinessObjects.Exceptions;
 using DTOs.Response.BadmintonCourt;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessObject
 {
@@ -77,8 +78,10 @@ namespace DataAccessObject
         {
             try
             {
-                var court = _context.BadmintonCourts.Find(id)
-                    ?? throw new Exception("id not found");
+                CourtEntity court = await _context.Courts
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(x => x.Id == id)
+                    ?? throw new Exception(MessageConstant.Vi.Court.Fail.NotFoundCourt);
                 return new Result<CourtDto>
                 {
                     StatusCode = HttpStatusCode.OK,

@@ -7,8 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DTOs.Response.Authentication;
 using DTOs;
-using DTOs.Response.AuthenPlayer;
-using DTOs.Request.AuthenPlayer;
 
 namespace Services.Interface
 {

@@ -55,5 +55,12 @@ namespace BusinessObjects.Constants
             /// <summary>"api/v1/court-slots/{id}"</summary>
             public const string CourtSlotEndpoint = CourtSlotsEndpoint + ByIdRoute;
         }
+        public static class BookingReservation
+        {
+            /// <summary>"api/v1/booking-reservations"</summary>
+            public const string BookingReservationsEndpoint = ApiEndpoint + "/booking-reservations";
+            /// <summary>"api/v1/booking-reservations/{id}"</summary>
+            public const string BookingReservationEndpoint = BookingReservationsEndpoint + ByIdRoute;
+        }
     }
 }

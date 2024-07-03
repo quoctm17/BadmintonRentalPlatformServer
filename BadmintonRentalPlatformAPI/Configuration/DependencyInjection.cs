@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddScoped<ITypeOfCourtRepository, TypeOfCourtRepository>();
         services.AddScoped<ICourtRepository, CourtRepository>();
         services.AddScoped<ICourtSlotRepository, CourtSlotRepository>();
+        services.AddScoped<IBookingReservationRepository, BookingReservationRepository>();
         return services;
     }
 
@@ -31,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<ITypeOfCourtService, TypeOfCourtService>();
         services.AddScoped<ICourtService, CourtService>();
         services.AddScoped<ICourtSlotService, CourtSlotService>();
+        services.AddScoped<IBookingReservationService, BookingReservationService>();
         return services;
     }
 

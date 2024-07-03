@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessObject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240702120145_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240703184419_remove_bookingreservation_table_payment")]
+    partial class remove_bookingreservation_table_payment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,9 +115,6 @@ namespace DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PaymentEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -129,8 +126,6 @@ namespace DataAccessObject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PaymentEntityId");
 
                     b.HasIndex("UserId");
 
@@ -432,10 +427,6 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.BookingReservationEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.PaymentEntity", null)
-                        .WithMany("BookingReservations")
-                        .HasForeignKey("PaymentEntityId");
-
                     b.HasOne("BusinessObjects.UserEntity", "User")
                         .WithMany("BookingReservations")
                         .HasForeignKey("UserId")
@@ -504,7 +495,7 @@ namespace DataAccessObject.Migrations
                         .HasForeignKey("BookingReservationEntityId");
 
                     b.HasOne("BusinessObjects.PaymentEntity", "Payment")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -549,7 +540,7 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.PaymentEntity", b =>
                 {
-                    b.Navigation("BookingReservations");
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BusinessObjects.RoleEntity", b =>

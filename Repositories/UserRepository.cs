@@ -1,13 +1,7 @@
-﻿using AutoMapper;
-using BusinessObjects;
-using BusinessObjects.Constants;
-using BusinessObjects.Enums;
-using BusinessObjects.Helpers;
+﻿using BusinessObjects;
 using DataAccessObject;
 using DTOs;
-using DTOs.Request.AuthenPlayer;
 using DTOs.Request.Authentication;
-using DTOs.Response.AuthenPlayer;
 using DTOs.Response.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interface;

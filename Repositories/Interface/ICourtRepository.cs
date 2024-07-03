@@ -12,5 +12,6 @@ namespace Repositories.Interface
     public interface ICourtRepository
     {
         Task<Result<CourtDto>> Create(CourtRequest request);
+        Task<Result<CourtDto>> GetById(int id);
     }
 }

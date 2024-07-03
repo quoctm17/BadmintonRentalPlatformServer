@@ -16,5 +16,7 @@ namespace Services
         public CourtService() { }
 
         public Task<Result<CourtDto>> Create(CourtRequest request) => CourtDAO.Instance.Create(request);
+
+        public Task<Result<CourtDto>> GetById(int id) => CourtDAO.Instance.GetById(id);
     }
 }

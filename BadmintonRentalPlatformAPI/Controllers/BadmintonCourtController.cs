@@ -20,10 +20,30 @@ namespace BadmintonRentalPlatformAPI.Controllers
         [HttpPost(ApiEndPointConstant.BadmintonCourt.BadmintonCourtsEndpoint)]
         [ProducesResponseType(typeof(Result<BadmintonCourtDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        
         public async Task<IActionResult> Create([FromBody] CreateBadmintonCourtRequest request)
         {
             Result<BadmintonCourtDto> result = await _badmintonCourtService.Create(request);
             return StatusCode((int)result.StatusCode, result);
         }
+
+        [HttpGet(ApiEndPointConstant.BadmintonCourt.BadmintonCourtEndpoint)]
+        [ProducesResponseType(typeof(Result<BadmintonCourtDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> BadmintonCourts([FromRoute] int id)
+        {
+            var result = await _badmintonCourtService.GetById(id);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        [HttpGet(ApiEndPointConstant.BadmintonCourt.BadmintonCourtsEndpoint)]
+        [ProducesResponseType(typeof(Result<List<BadmintonCourtDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> BadmintonCourts()
+        {
+            var result = await _badmintonCourtService.GetList();
+            return StatusCode((int)result.StatusCode, result);
+        }
+
     }
 }

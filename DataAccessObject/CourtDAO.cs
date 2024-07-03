@@ -11,6 +11,7 @@ using DTOs.Response.Court;
 using DTOs.Request.Court;
 using Mapster;
 using BusinessObjects.Exceptions;
+using DTOs.Response.BadmintonCourt;
 
 namespace DataAccessObject
 {
@@ -69,6 +70,29 @@ namespace DataAccessObject
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     Message = ex.Message,
+                };
+            }
+        }
+        public async Task<Result<CourtDto>> GetById(int id)
+        {
+            try
+            {
+                var court = _context.BadmintonCourts.Find(id)
+                    ?? throw new Exception("id not found");
+                return new Result<CourtDto>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = court.Adapt<CourtDto>()
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new Result<CourtDto>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Message = ex.Message,
+
                 };
             }
         }

@@ -17,5 +17,9 @@ namespace Repositories
         }
 
         public Task<Result<BadmintonCourtDto>> Create(CreateBadmintonCourtRequest request) => BadmintonCourtDAO.Instance.Create(request);
+
+        public Task<Result<BadmintonCourtDto>> GetById(int id) => BadmintonCourtDAO.Instance.GetById(id);
+
+        Task<Result<List<BadmintonCourtDto>>> IBadmintonCourtRepository.GetList() => BadmintonCourtDAO.Instance.GetList();
     }
 }

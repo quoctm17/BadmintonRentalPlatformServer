@@ -13,5 +13,6 @@ namespace Services.Interface
     public interface ICourtService
     {
         Task<Result<CourtDto>> Create(CourtRequest request);
+        Task<Result<CourtDto>> GetById(int id);
     }
 }

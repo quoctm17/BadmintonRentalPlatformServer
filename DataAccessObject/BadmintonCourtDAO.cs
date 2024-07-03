@@ -63,4 +63,49 @@ public class BadmintonCourtDAO
             };
         }
     }
+    public async Task<Result<BadmintonCourtDto>> GetById(int id)
+    {
+        try
+        {
+            var badmintonCourt = _context.BadmintonCourts.Find(id)
+                ?? throw new Exception("id not found");
+            return new Result<BadmintonCourtDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = badmintonCourt.Adapt<BadmintonCourtDto>()
+            };
+           
+        }catch (Exception ex)
+        {
+            return new Result<BadmintonCourtDto>
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Message = ex.Message,
+
+            };
+        }
+    }
+    public async Task<Result<List<BadmintonCourtDto>>> GetList()
+    {
+        try
+        {
+            var badmintonCourt = _context.BadmintonCourts.ToList()
+                ?? throw new Exception("not found");
+            return new Result<List<BadmintonCourtDto>>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = badmintonCourt.Adapt<List<BadmintonCourtDto>>()
+            };
+
+        }
+        catch (Exception ex)
+        {
+            return new Result<List<BadmintonCourtDto>>
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Message = ex.Message,
+
+            };
+        }
+    }
 }

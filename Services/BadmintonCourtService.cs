@@ -23,5 +23,9 @@ namespace Services
         }
 
         public Task<Result<BadmintonCourtDto>> Create(CreateBadmintonCourtRequest request) => _repository.Create(request);
+
+        public Task<Result<BadmintonCourtDto>> GetById(int id) => _repository.GetById(id);
+
+        Task<Result<List<BadmintonCourtDto>>> IBadmintonCourtService.GetList() => _repository.GetList();
     }
 }

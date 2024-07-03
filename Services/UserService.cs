@@ -1,8 +1,6 @@
 ﻿using BusinessObjects;
 using DTOs;
-using DTOs.Request.AuthenPlayer;
 using DTOs.Request.Authentication;
-using DTOs.Response.AuthenPlayer;
 using DTOs.Response.Authentication;
 using Microsoft.Extensions.Logging;
 using Repositories.Interface;

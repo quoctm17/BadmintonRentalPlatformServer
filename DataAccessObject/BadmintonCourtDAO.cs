@@ -6,6 +6,7 @@ using DTOs;
 using System.Net;
 using Mapster;
 using BusinessObjects.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessObject;
 
@@ -67,8 +68,10 @@ public class BadmintonCourtDAO
     {
         try
         {
-            var badmintonCourt = _context.BadmintonCourts.Find(id)
-                ?? throw new Exception("id not found");
+            BadmintonCourtEntity badmintonCourt = await _context.BadmintonCourts
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id)
+                ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
             return new Result<BadmintonCourtDto>
             {
                 StatusCode = HttpStatusCode.OK,
@@ -89,8 +92,36 @@ public class BadmintonCourtDAO
     {
         try
         {
-            var badmintonCourt = _context.BadmintonCourts.ToList()
-                ?? throw new Exception("not found");
+            ICollection<BadmintonCourtEntity> badmintonCourt = await _context.BadmintonCourts
+                .AsNoTracking()
+                .ToListAsync()
+                ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
+            return new Result<List<BadmintonCourtDto>>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = badmintonCourt.Adapt<List<BadmintonCourtDto>>()
+            };
+
+        }
+        catch (Exception ex)
+        {
+            return new Result<List<BadmintonCourtDto>>
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Message = ex.Message,
+
+            };
+        }
+    }
+    public async Task<Result<List<BadmintonCourtDto>>> GetPaging(int page, int size)
+    {
+        try
+        {
+            ICollection<BadmintonCourtEntity> badmintonCourt = await _context.BadmintonCourts
+                .AsNoTracking()
+                .Skip((page - 1) * size).Take(size)
+                .ToListAsync()
+                ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
             return new Result<List<BadmintonCourtDto>>
             {
                 StatusCode = HttpStatusCode.OK,

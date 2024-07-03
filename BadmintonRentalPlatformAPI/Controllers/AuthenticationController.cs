@@ -1,9 +1,7 @@
 ﻿using BusinessObjects;
 using BusinessObjects.Constants;
 using DTOs;
-using DTOs.Request.AuthenPlayer;
 using DTOs.Request.Authentication;
-using DTOs.Response.AuthenPlayer;
 using DTOs.Response.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

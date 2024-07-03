@@ -184,6 +184,32 @@ namespace BusinessObjects.Constants
                     public static string NotFoundCourtSlot = String.Format(NotFoundTemplate, CourtSlotMessage);
                 }
             }
+            public static class BookingReservation
+            {
+                #region Court Field
+                private const string BookingReservationMessage = "Booking reservation";
+                private const string User = "User";
+                private const string Notes = "Notes";
+                #endregion
+                public static class Require
+                {
+                    public const string UserRequired = User + RequiredSuffix;
+                    public const string NotesRequired = Notes + RequiredSuffix;
+                }
+                public static class Success
+                {
+                    public static string CreateBookingReservation = String.Format(CreateSuccessTemplate, BookingReservationMessage);
+                    public static string UpdateBookingReservation = String.Format(UpdateSuccessTemplate, BookingReservationMessage);
+                    public static string DeleteBookingReservation = String.Format(DeleteSuccessTemplate, BookingReservationMessage);
+                }
+                public static class Fail
+                {
+                    public static string CreateBookingReservation = String.Format(CreateFailTemplate, BookingReservationMessage);
+                    public static string UpdateBookingReservation = String.Format(UpdateFailTemplate, BookingReservationMessage);
+                    public static string DeleteBookingReservation = String.Format(DeleteFailTemplate, BookingReservationMessage);
+                    public static string NotFoundBookingReservation = String.Format(NotFoundTemplate, BookingReservationMessage);
+                }
+            }
         }
     }
 }

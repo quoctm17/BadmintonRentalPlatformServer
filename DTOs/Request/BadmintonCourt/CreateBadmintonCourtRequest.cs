@@ -15,9 +15,9 @@ namespace DTOs.Request.BadmintonCourt
         [Required(ErrorMessage = MessageConstant.Vi.BadmintonCourt.Require.CourtNumberRequired)]
         public int CourtNumber { get; set; }
         [Required(ErrorMessage = MessageConstant.Vi.BadmintonCourt.Require.StartTimeRequired)]
-        public DateTime StartTime { get; set; }
+        public TimeSpan StartTime { get; set; }
         [Required(ErrorMessage = MessageConstant.Vi.BadmintonCourt.Require.EndTimeRequired)]
-        public DateTime EndTime { get; set; }
+        public TimeSpan EndTime { get; set; }
         [Required(ErrorMessage = MessageConstant.Vi.BadmintonCourt.Require.NumberOfCourtRequired)]
         public int NumberOfCourt { get; set; }
         [Required(ErrorMessage = MessageConstant.Vi.BadmintonCourt.Require.AddressRequired)]

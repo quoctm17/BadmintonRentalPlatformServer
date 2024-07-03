@@ -112,9 +112,6 @@ namespace DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PaymentEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -126,8 +123,6 @@ namespace DataAccessObject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PaymentEntityId");
 
                     b.HasIndex("UserId");
 
@@ -429,10 +424,6 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.BookingReservationEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.PaymentEntity", null)
-                        .WithMany("BookingReservations")
-                        .HasForeignKey("PaymentEntityId");
-
                     b.HasOne("BusinessObjects.UserEntity", "User")
                         .WithMany("BookingReservations")
                         .HasForeignKey("UserId")
@@ -501,7 +492,7 @@ namespace DataAccessObject.Migrations
                         .HasForeignKey("BookingReservationEntityId");
 
                     b.HasOne("BusinessObjects.PaymentEntity", "Payment")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -546,7 +537,7 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.PaymentEntity", b =>
                 {
-                    b.Navigation("BookingReservations");
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BusinessObjects.RoleEntity", b =>

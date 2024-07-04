@@ -9,6 +9,8 @@ using Repositories.Utils;
 using Mapster;
 using Azure.Core;
 using BusinessObjects.Exceptions;
+using BusinessObjects.Helpers;
+using BusinessObjects.Enums;
 
 namespace DataAccessObject;
 
@@ -49,13 +51,14 @@ public class UserDAO
         Tuple<string, Guid> guidClaim = null!;
         LoginResponse loginResponse = null!;
 
-        loginResponse = new LoginResponse(user.Id, user.FullName, user.Email);
+        loginResponse = new LoginResponse(user.Id, user.FullName, user.Email, user.Gender, user.DateOfBirth, user.Address, user.ProfileImage, user.PhoneNumber, EnumHelper.ParseEnum<RoleEnum>(user.Role.RoleName));
 
         var token = JwtUtil.GenerateJwtToken(user, guidClaim);
         loginResponse.AccessToken = token;
 
         return (guidClaim, new Result<LoginResponse> { Data = loginResponse, StatusCode = HttpStatusCode.OK }, user);
     }
+
     public async Task<(Tuple<string, Guid>, Result<RegisterResponse>, UserEntity user)> Register(RegisterRequest request)
     {
         var listUser = await _context.Users
@@ -80,12 +83,14 @@ public class UserDAO
                 throw new Exception(MessageConstant.Vi.User.Fail.CreateUser);
             }
 
-            newUser = await _context.Users.Include(x => x.Role).SingleOrDefaultAsync(predicate: x => x.Id.Equals(newUser.Id));
+            newUser = await _context.Users.Include(x => x.Role)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(predicate: x => x.Id.Equals(newUser.Id));
 
             Tuple<string, Guid> guidClaim = null!;
             RegisterResponse registerResponse = null!;
 
-            registerResponse = new RegisterResponse(newUser.Id, newUser.FullName, newUser.Email);
+            registerResponse = new RegisterResponse(newUser.Id, newUser.FullName, newUser.Email, newUser.Gender, newUser.DateOfBirth, newUser.Address, newUser.ProfileImage, newUser.PhoneNumber, EnumHelper.ParseEnum<RoleEnum>(newUser.Role.RoleName));
 
             var token = JwtUtil.GenerateJwtToken(newUser, guidClaim);
             registerResponse!.AccessToken = token;

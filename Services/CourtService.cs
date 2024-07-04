@@ -8,15 +8,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Repositories.Interface;
 
 namespace Services
 {
     public class CourtService : ICourtService
     {
-        public CourtService() { }
+        private readonly ICourtRepository _repository;
+        public CourtService(ICourtRepository repository)
+        {
+            _repository = repository;
+        }
 
-        public Task<Result<CourtDto>> Create(CourtRequest request) => CourtDAO.Instance.Create(request);
+        public Task<Result<CourtDto>> Create(CourtRequest request) => _repository.Create(request);
 
-        public Task<Result<CourtDto>> GetById(int id) => CourtDAO.Instance.GetById(id);
+        public Task<Result<CourtDto>> GetById(int id) => _repository.GetById(id);
     }
 }

@@ -10,6 +10,7 @@ namespace DTOs.Response.BadmintonCourt
 {
     public class BadmintonCourtDto
     {
+        public int Id { get; set; }
         public string CourtName { get; set; }
         public int CourtNumber { get; set; }
         public TimeSpan StartTime { get; set; }

@@ -16,11 +16,9 @@ namespace Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _repository;
-        private readonly ILogger _logger;
-        public UserService(IUserRepository repository, ILogger<UserService> logger)
+        public UserService(IUserRepository repository)
         {
             _repository = repository;
-            _logger = logger;
         }
 
         public Task<(Tuple<string, Guid>, Result<LoginResponse>, UserEntity user)> Login(LoginRequest request) => _repository.Login(request);

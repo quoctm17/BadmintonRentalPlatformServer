@@ -15,11 +15,9 @@ namespace Services
     public class BadmintonCourtService : IBadmintonCourtService
     {
         private readonly IBadmintonCourtRepository _repository;
-        private readonly ILogger _logger;
-        public BadmintonCourtService(IBadmintonCourtRepository repository, ILogger<UserService> logger)
+        public BadmintonCourtService(IBadmintonCourtRepository repository)
         {
             _repository = repository;
-            _logger = logger;
         }
 
         public Task<Result<BadmintonCourtDto>> Create(CreateBadmintonCourtRequest request) => _repository.Create(request);

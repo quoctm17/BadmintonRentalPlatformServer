@@ -1,16 +1,19 @@
-﻿using DataAccessObject;
-using DTOs.Request.BookingReservation;
+﻿using DTOs.Request.BookingReservation;
 using DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs.Response.BookingReservation;
 
 namespace Services.Interface
 {
     public interface IBookingReservationService
     {
-        Task<Result<bool>> Create(BookingReservationRequest request);
+        Task<Result<bool>> Create(CreateBookingReservationRequest request);
+        Task<Result<bool>> Delete(int id);
+        Task<Result<ICollection<BookingReservationViewModel>>> GetAll();
+        Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request);
     }
 }

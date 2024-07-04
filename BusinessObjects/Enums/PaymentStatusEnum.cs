@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Enums
 {
-    public enum RoleEnum
+    public enum PaymentStatusEnum
     {
-        Player = 1,
-        Owner,
-        Employee,
-        Administrator
+        FAIL,
+        PENDING,
+        COMPLETE,
+        CANCEL,
     }
 }

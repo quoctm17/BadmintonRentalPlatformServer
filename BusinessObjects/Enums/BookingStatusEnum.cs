@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Enums
 {
-    public enum RoleEnum
+    public enum BookingStatusEnum
     {
-        Player = 1,
-        Owner,
-        Employee,
-        Administrator
+        PAYING,
+        BOOKED,
+        USED,
+        EXPIRED,
+        CANCELLED,
     }
 }

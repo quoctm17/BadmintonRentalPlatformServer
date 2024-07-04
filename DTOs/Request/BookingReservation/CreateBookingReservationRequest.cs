@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DTOs.Request.BookingReservation
 {
-    public class BookingReservationRequest
+    public class CreateBookingReservationRequest
     {
         [Required(ErrorMessage = MessageConstant.Vi.BookingReservation.Require.UserRequired)]
         public int UserId { get; set; }

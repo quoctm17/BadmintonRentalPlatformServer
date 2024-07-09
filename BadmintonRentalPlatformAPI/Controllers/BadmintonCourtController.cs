@@ -45,5 +45,22 @@ namespace BadmintonRentalPlatformAPI.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
+        [HttpPut(ApiEndPointConstant.BadmintonCourt.BadmintonCourtsEndpoint)]
+        [ProducesResponseType(typeof(Result<BadmintonCourtDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update([FromBody] UpdateBadmintonCourtRequest request)
+        {
+            Result<BadmintonCourtDto> result = await _badmintonCourtService.Update(request);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        [HttpDelete(ApiEndPointConstant.BadmintonCourt.BadmintonCourtEndpoint)]
+        [ProducesResponseType(typeof(Result<BadmintonCourtDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            Result<BadmintonCourtDto> result = await _badmintonCourtService.Delete(id);
+            return StatusCode((int)result.StatusCode, result);
+        }
     }
 }

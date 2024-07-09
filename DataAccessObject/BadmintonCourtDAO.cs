@@ -7,6 +7,7 @@ using System.Net;
 using Mapster;
 using BusinessObjects.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Azure.Core;
 
 namespace DataAccessObject;
 
@@ -139,4 +140,84 @@ public class BadmintonCourtDAO
             };
         }
     }
+
+    public async Task<Result<BadmintonCourtDto>> Update(UpdateBadmintonCourtRequest request)
+    {
+        try
+        {
+
+            UserEntity? user = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.CourtOwnerId);
+            if (user == null)
+            {
+                throw new BadRequestException(MessageConstant.Vi.User.Fail.NotFoundUser);
+            }
+
+
+            BadmintonCourtEntity? court = await _context.BadmintonCourts.SingleOrDefaultAsync(c => c.Id == request.Id);
+            if (court == null)
+            {
+                throw new BadRequestException(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
+            }
+
+ 
+            request.Adapt(court); 
+
+            _context.BadmintonCourts.Update(court);
+            bool isSuccessful = await _context.SaveChangesAsync() > 0;
+
+            if (!isSuccessful)
+            {
+                throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.UpdateBadmintonCourt);
+            }
+
+            return new Result<BadmintonCourtDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = court.Adapt<BadmintonCourtDto>(),
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Result<BadmintonCourtDto>
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = ex.Message,
+            };
+        }
+    }
+
+    public async Task<Result<BadmintonCourtDto>> Delete(int id)
+    {
+        try
+        {
+            BadmintonCourtEntity badmintonCourt = await _context.BadmintonCourts
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id)
+                 ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
+
+            _context.BadmintonCourts.Remove(badmintonCourt);
+            bool isSuccessful = await _context.SaveChangesAsync() > 0;
+
+            if (!isSuccessful)
+            {
+                throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.DeleteBadmintonCourt);
+            }
+
+            return new Result<BadmintonCourtDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = badmintonCourt.Adapt<BadmintonCourtDto>(),
+            };
+
+        }
+        catch (Exception ex)
+        {
+            return new Result<BadmintonCourtDto>
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = ex.Message,
+            };
+        }
+    }
 }
+

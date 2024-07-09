@@ -22,7 +22,11 @@ namespace Services
 
         public Task<Result<BadmintonCourtDto>> Create(CreateBadmintonCourtRequest request) => _repository.Create(request);
 
+        public Task<Result<BadmintonCourtDto>> Delete(int id) => _repository.Delete(id);
+
         public Task<Result<BadmintonCourtDto>> GetById(int id) => _repository.GetById(id);
+
+        public Task<Result<BadmintonCourtDto>> Update(UpdateBadmintonCourtRequest request) => _repository.Update(request);
 
         Task<Result<List<BadmintonCourtDto>>> IBadmintonCourtService.GetList() => _repository.GetList();
     }

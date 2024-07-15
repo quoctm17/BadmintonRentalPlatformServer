@@ -15,9 +15,7 @@ namespace BusinessObjects
         
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
-
-        public float Price { get; set; }
-
+        
         public ICollection<BookingDetailEntity> BookingDetails { get; set; }
     }
 

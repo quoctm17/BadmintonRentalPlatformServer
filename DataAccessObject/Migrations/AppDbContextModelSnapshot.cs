@@ -144,6 +144,9 @@ namespace DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
                     b.Property<int>("TypeOfCourtId")
                         .HasColumnType("int");
 
@@ -197,9 +200,6 @@ namespace DataAccessObject.Migrations
 
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
 
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");

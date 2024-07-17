@@ -64,7 +64,7 @@ namespace DataAccessObject
 
                 foreach (var courtSlotId in request.CourtSlotId)
                 {
-                    CourtSlotEntity courtSlot = await _context.CourtSlots
+                    CourtSlotEntity courtSlot = await _context.CourtSlots.Include(court => court.Court)
                         .AsNoTracking()
                         .SingleOrDefaultAsync(x => x.Id == courtSlotId)
                         ?? throw new Exception(MessageConstant.Vi.CourtSlot.Fail.NotFoundCourtSlot);
@@ -73,10 +73,10 @@ namespace DataAccessObject
                     {
                         BookingReservation = bookingReservation,
                         CourtSlotId = courtSlotId,
-                        Price = courtSlot.Price,
+                        Price = courtSlot.Court.Price,
                     });
 
-                    bookingReservation.TotalPrice += courtSlot.Price;
+                    bookingReservation.TotalPrice += courtSlot.Court.Price;
                 }
 
                 await _context.BookingReservations.AddAsync(bookingReservation);

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessObject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240701174934_change_datetime_to_timespan_table_badminton_court")]
-    partial class change_datetime_to_timespan_table_badminton_court
+    [Migration("20240715084411_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,9 +115,6 @@ namespace DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PaymentEntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -129,8 +126,6 @@ namespace DataAccessObject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PaymentEntityId");
 
                     b.HasIndex("UserId");
 
@@ -151,6 +146,9 @@ namespace DataAccessObject.Migrations
                     b.Property<string>("CourtCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.Property<int>("TypeOfCourtId")
                         .HasColumnType("int");
@@ -205,9 +203,6 @@ namespace DataAccessObject.Migrations
 
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
 
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
@@ -432,10 +427,6 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.BookingReservationEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.PaymentEntity", null)
-                        .WithMany("BookingReservations")
-                        .HasForeignKey("PaymentEntityId");
-
                     b.HasOne("BusinessObjects.UserEntity", "User")
                         .WithMany("BookingReservations")
                         .HasForeignKey("UserId")
@@ -504,7 +495,7 @@ namespace DataAccessObject.Migrations
                         .HasForeignKey("BookingReservationEntityId");
 
                     b.HasOne("BusinessObjects.PaymentEntity", "Payment")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -549,7 +540,7 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.PaymentEntity", b =>
                 {
-                    b.Navigation("BookingReservations");
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("BusinessObjects.RoleEntity", b =>

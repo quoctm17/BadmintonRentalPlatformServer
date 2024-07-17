@@ -27,5 +27,11 @@ namespace BadmintonRentalPlatformAPI.Controllers
             Result<CourtSlotDto> result = await _service.Create(request);
             return StatusCode((int)result.StatusCode, result);
         }
+
+        [HttpGet("create-time-span")]
+        public async Task<IActionResult> CreateTimeSpan()
+        {
+            return Ok(new TimeSpan(2, 30,0));
+        }
     }
 }

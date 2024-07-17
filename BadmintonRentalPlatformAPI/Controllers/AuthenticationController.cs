@@ -3,6 +3,7 @@ using BusinessObjects.Constants;
 using DTOs;
 using DTOs.Request.Authentication;
 using DTOs.Response.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
@@ -17,7 +18,7 @@ namespace BadmintonRentalPlatformAPI.Controllers
         {
             _userService = userService;
         }
-
+        [Authorize]
         [HttpPost(ApiEndPointConstant.Authentication.LoginEndPoint)]
         [ProducesResponseType(typeof(Result<LoginResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]

@@ -95,6 +95,7 @@ public class BadmintonCourtDAO
         {
             ICollection<BadmintonCourtEntity> badmintonCourt = await _context.BadmintonCourts
                 .AsNoTracking()
+                .Include( x=> x.CourtImages)
                 .ToListAsync()
                 ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
             return new Result<List<BadmintonCourtDto>>

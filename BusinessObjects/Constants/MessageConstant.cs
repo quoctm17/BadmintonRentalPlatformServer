@@ -59,6 +59,7 @@ namespace BusinessObjects.Constants
                     public static string UpdateUser = String.Format(UpdateFailTemplate, UserMessage);
                     public static string DeleteUser = String.Format(DeleteFailTemplate, UserMessage);
                     public static string NotFoundUser = String.Format(NotFoundTemplate, UserMessage);
+                    public static string NotFoundRole = String.Format(NotFoundTemplate, Role);
                     public static string EmailExisted = Email + " đã tồn tại !!!";
                 }
             }

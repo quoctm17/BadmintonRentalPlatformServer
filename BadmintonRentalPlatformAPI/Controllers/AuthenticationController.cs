@@ -18,7 +18,7 @@ namespace BadmintonRentalPlatformAPI.Controllers
         {
             _userService = userService;
         }
-        [Authorize]
+
         [HttpPost(ApiEndPointConstant.Authentication.LoginEndPoint)]
         [ProducesResponseType(typeof(Result<LoginResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]

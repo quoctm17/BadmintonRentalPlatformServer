@@ -11,6 +11,10 @@ using Azure.Core;
 using BusinessObjects.Exceptions;
 using BusinessObjects.Helpers;
 using BusinessObjects.Enums;
+using DTOs.Response.BadmintonCourt;
+using DTOs.Response.User;
+using DTOs.Request.BadmintonCourt;
+using DTOs.Request.User;
 
 namespace DataAccessObject;
 
@@ -104,6 +108,159 @@ public class UserDAO
                 StatusCode = HttpStatusCode.InternalServerError,
                 Message = ex.Message,
             }, null)!;
+        }
+    }
+
+    public async Task<Result<List<UserDto>>> GetList()
+    {
+        try
+        {
+            ICollection<UserEntity> user = await _context.Users
+                .AsNoTracking()
+                .ToListAsync()
+                ?? throw new Exception(MessageConstant.Vi.User.Fail.NotFoundUser);
+            return new Result<List<UserDto>>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user.Adapt<List<UserDto>>()
+            };
+
+        }
+        catch (Exception ex)
+        {
+            return new Result<List<UserDto>>
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Message = ex.Message,
+
+            };
+        }
+    }
+
+    public async Task<Result<UserDto>> GetById(int id)
+    {
+        try
+        {
+            UserEntity user = await _context.Users
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id)
+                ?? throw new Exception(MessageConstant.Vi.User.Fail.NotFoundUser);
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user.Adapt<UserDto>()
+            };
+
+        }
+        catch (Exception ex)
+        {
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Message = ex.Message,
+
+            };
+        }
+    }
+
+    public async Task<Result<UserDto>> Update(UpdateUserRequest request)
+    {
+        try
+        {
+            UserEntity? user = await _context.Users.SingleOrDefaultAsync(c => c.Id == request.Id);
+            if (user == null)
+            {
+                throw new BadRequestException(MessageConstant.Vi.User.Fail.NotFoundUser);
+            }
+
+
+            request.Adapt(user);
+
+            _context.Users.Update(user);
+            bool isSuccessful = await _context.SaveChangesAsync() > 0;
+
+            if (!isSuccessful)
+            {
+                throw new Exception(MessageConstant.Vi.User.Fail.UpdateUser);
+            }
+
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user.Adapt<UserDto>(),
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = ex.Message,
+            };
+        }
+    }
+
+    public async Task<Result<UserDto>> Create(CreateUserRequest request)
+    {
+        try
+        {
+            UserEntity newUser = request.Adapt<UserEntity>();
+
+            await _context.Users.AddAsync(newUser);
+            bool isSuccessful = await _context.SaveChangesAsync() > 0;
+
+            if (!isSuccessful)
+            {
+                throw new Exception(MessageConstant.Vi.User.Fail.CreateUser);
+            }
+
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = newUser.Adapt<UserDto>(),
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = ex.Message,
+            };
+        }
+    }
+
+    public async Task<Result<UserDto>> Delete(int id)
+    {
+        try
+        {
+            UserEntity user = await _context.Users
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id)
+                 ?? throw new Exception(MessageConstant.Vi.User.Fail.NotFoundUser);
+
+            _context.Users.Remove(user);
+            bool isSuccessful = await _context.SaveChangesAsync() > 0;
+
+            if (!isSuccessful)
+            {
+                throw new Exception(MessageConstant.Vi.User.Fail.DeleteUser);
+            }
+
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user.Adapt<UserDto>(),
+            };
+
+        }
+        catch (Exception ex)
+        {
+            return new Result<UserDto>
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = ex.Message,
+            };
         }
     }
 }

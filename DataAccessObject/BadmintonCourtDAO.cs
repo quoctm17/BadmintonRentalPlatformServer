@@ -8,6 +8,7 @@ using Mapster;
 using BusinessObjects.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Azure.Core;
+using DTOs.Response.Page;
 
 namespace DataAccessObject;
 
@@ -71,39 +72,52 @@ public class BadmintonCourtDAO
         {
             BadmintonCourtEntity badmintonCourt = await _context.BadmintonCourts
                 .AsNoTracking()
+                .Include(x => x.CourtImages) // Bao gồm cả hình ảnh
                 .SingleOrDefaultAsync(x => x.Id == id)
                 ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
+
+            var badmintonCourtDto = badmintonCourt.Adapt<BadmintonCourtDto>();
+            badmintonCourtDto.CourtImagePaths = badmintonCourt.CourtImages.Select(img => img.ImagePath).ToList();
+
             return new Result<BadmintonCourtDto>
             {
                 StatusCode = HttpStatusCode.OK,
-                Data = badmintonCourt.Adapt<BadmintonCourtDto>()
+                Data = badmintonCourtDto
             };
-           
-        }catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return new Result<BadmintonCourtDto>
             {
                 StatusCode = HttpStatusCode.NotFound,
                 Message = ex.Message,
-
             };
         }
     }
+
+
     public async Task<Result<List<BadmintonCourtDto>>> GetList()
     {
         try
         {
-            ICollection<BadmintonCourtEntity> badmintonCourt = await _context.BadmintonCourts
+            var badmintonCourts = await _context.BadmintonCourts
                 .AsNoTracking()
-                .Include( x=> x.CourtImages)
+                .Include(x => x.CourtImages) // Include CourtImages
                 .ToListAsync()
                 ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
+
+            var badmintonCourtDtos = badmintonCourts.Select(court =>
+            {
+                var dto = court.Adapt<BadmintonCourtDto>();
+                dto.CourtImagePaths = court.CourtImages.Select(img => img.ImagePath).ToList();
+                return dto;
+            }).ToList();
+
             return new Result<List<BadmintonCourtDto>>
             {
                 StatusCode = HttpStatusCode.OK,
-                Data = badmintonCourt.Adapt<List<BadmintonCourtDto>>()
+                Data = badmintonCourtDtos
             };
-
         }
         catch (Exception ex)
         {
@@ -111,36 +125,57 @@ public class BadmintonCourtDAO
             {
                 StatusCode = HttpStatusCode.NotFound,
                 Message = ex.Message,
-
             };
         }
     }
-    public async Task<Result<List<BadmintonCourtDto>>> GetPaging(int page, int size)
+
+    public async Task<Result<PagedResult<BadmintonCourtDto>>> GetPaging(int page, int size)
     {
         try
         {
-            ICollection<BadmintonCourtEntity> badmintonCourt = await _context.BadmintonCourts
+            var totalItems = await _context.BadmintonCourts.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / size);
+
+            var badmintonCourts = await _context.BadmintonCourts
                 .AsNoTracking()
+                .Include(x => x.CourtImages)
                 .Skip((page - 1) * size).Take(size)
                 .ToListAsync()
                 ?? throw new Exception(MessageConstant.Vi.BadmintonCourt.Fail.NotFoundBadmintonCourt);
-            return new Result<List<BadmintonCourtDto>>
+
+            var badmintonCourtDtos = badmintonCourts.Select(court =>
             {
-                StatusCode = HttpStatusCode.OK,
-                Data = badmintonCourt.Adapt<List<BadmintonCourtDto>>()
+                var dto = court.Adapt<BadmintonCourtDto>();
+                dto.CourtImagePaths = court.CourtImages.Select(img => img.ImagePath).ToList();
+                return dto;
+            }).ToList();
+
+            var pagedResult = new PagedResult<BadmintonCourtDto>
+            {
+                Items = badmintonCourtDtos,
+                CurrentPage = page,
+                TotalPages = totalPages,
+                PageSize = size,
+                TotalItems = totalItems
             };
 
+            return new Result<PagedResult<BadmintonCourtDto>>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = pagedResult
+            };
         }
         catch (Exception ex)
         {
-            return new Result<List<BadmintonCourtDto>>
+            return new Result<PagedResult<BadmintonCourtDto>>
             {
                 StatusCode = HttpStatusCode.NotFound,
                 Message = ex.Message,
-
             };
         }
     }
+
+
 
     public async Task<Result<BadmintonCourtDto>> Update(UpdateBadmintonCourtRequest request)
     {

@@ -38,5 +38,14 @@ namespace BadmintonRentalPlatformAPI.Controllers
             var result = await _service.GetById(id);
             return StatusCode((int)result.StatusCode, result);
         }
+
+        [HttpGet(ApiEndPointConstant.Court.CourtsEndpoint)]
+        [ProducesResponseType(typeof(Result<List<CourtDetailDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetCourtsByBadmintonCourtId([FromQuery] int badmintonCourtId)
+        {
+            var result = await _service.GetCourtsByBadmintonCourtId(badmintonCourtId);
+            return StatusCode((int)result.StatusCode, result);
+        }
     }
 }

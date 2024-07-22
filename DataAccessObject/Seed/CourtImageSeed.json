@@ -1,0 +1,50 @@
+[
+  {
+    "ImagePath": "/img/room/room-b1.jpg",
+    "IsMainCarousel": true,
+    "IsBackground": false,
+    "BadmintonCourtId": 1
+  },
+  {
+    "ImagePath": "/img/room/room-b2.jpg",
+    "IsMainCarousel": false,
+    "IsBackground": true,
+    "BadmintonCourtId": 1
+  },
+  {
+    "ImagePath": "/img/room/room-b3.jpg",
+    "IsMainCarousel": false,
+    "IsBackground": false,
+    "BadmintonCourtId": 2
+  },
+  {
+    "ImagePath": "/img/room/room-b4.jpg",
+    "IsMainCarousel": true,
+    "IsBackground": false,
+    "BadmintonCourtId": 2
+  },
+  {
+    "ImagePath": "/img/room/room-b1.jpg",
+    "IsMainCarousel": false,
+    "IsBackground": true,
+    "BadmintonCourtId": 3
+  },
+  {
+    "ImagePath": "/img/room/room-b2.jpg",
+    "IsMainCarousel": false,
+    "IsBackground": false,
+    "BadmintonCourtId": 3
+  },
+  {
+    "ImagePath": "/img/room/room-b3.jpg",
+    "IsMainCarousel": true,
+    "IsBackground": false,
+    "BadmintonCourtId": 4
+  },
+  {
+    "ImagePath": "/img/room/room-b4.jpg",
+    "IsMainCarousel": false,
+    "IsBackground": true,
+    "BadmintonCourtId": 4
+  }
+]

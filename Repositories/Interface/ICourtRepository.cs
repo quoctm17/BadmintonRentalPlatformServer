@@ -1,11 +1,6 @@
 ﻿using DTOs.Request.Court;
 using DTOs.Response.Court;
 using DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Interface
 {
@@ -13,5 +8,6 @@ namespace Repositories.Interface
     {
         Task<Result<CourtDto>> Create(CourtRequest request);
         Task<Result<CourtDto>> GetById(int id);
+        Task<Result<List<CourtDetailDto>>> GetCourtsByBadmintonCourtId(int badmintonCourtId);
     }
 }

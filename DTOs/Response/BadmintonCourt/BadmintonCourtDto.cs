@@ -20,5 +20,6 @@ namespace DTOs.Response.BadmintonCourt
         public string Description { get; set; }
         public float Rating { get; set; }
         public int CourtOwnerId { get; set; }
+        public List<string> CourtImagePaths { get; set; }
     }
 }

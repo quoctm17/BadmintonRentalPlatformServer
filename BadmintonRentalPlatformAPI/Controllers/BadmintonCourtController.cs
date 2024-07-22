@@ -2,6 +2,7 @@
 using DTOs;
 using DTOs.Request.BadmintonCourt;
 using DTOs.Response.BadmintonCourt;
+using DTOs.Response.Page;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
@@ -62,5 +63,15 @@ namespace BadmintonRentalPlatformAPI.Controllers
             Result<BadmintonCourtDto> result = await _badmintonCourtService.Delete(id);
             return StatusCode((int)result.StatusCode, result);
         }
+
+        [HttpGet(ApiEndPointConstant.BadmintonCourt.BadmintonCourtsPagingEndpoint)]
+        [ProducesResponseType(typeof(Result<PagedResult<BadmintonCourtDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetPagedBadmintonCourts([FromQuery] int page, [FromQuery] int size)
+        {
+            var result = await _badmintonCourtService.GetPaging(page, size);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
     }
 }

@@ -115,14 +115,20 @@ public class UserDAO
     {
         try
         {
-            ICollection<UserEntity> user = await _context.Users
+                List<UserEntity> user = await _context.Users
+                                               .Include(user => user.Role)
                 .AsNoTracking()
                 .ToListAsync()
                 ?? throw new Exception(MessageConstant.Vi.User.Fail.NotFoundUser);
+            var users = user.Adapt<List<UserDto>>();
+            for (int i = 0; i < user.Count; i++)
+            {
+                users[i].RoleName = user[i].Role.RoleName;
+            }
             return new Result<List<UserDto>>
             {
                 StatusCode = HttpStatusCode.OK,
-                Data = user.Adapt<List<UserDto>>()
+                Data = users
             };
 
         }

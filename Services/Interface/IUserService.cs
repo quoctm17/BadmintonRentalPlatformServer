@@ -22,5 +22,6 @@ namespace Services.Interface
         Task<Result<UserDto>> Update(UpdateUserRequest request);
         Task<Result<UserDto>> Create(CreateUserRequest request);
         Task<Result<UserDto>> Delete(int id);
+        public string GenerateToken(string email);
     }
 }

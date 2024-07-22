@@ -67,10 +67,16 @@ namespace DataAccessObject
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<BookingDetailEntity>()
-                .HasOne(bd => bd.CourtSlot)
-                .WithMany(cs => cs.BookingDetails)
-                .HasForeignKey(bd => bd.CourtSlotId)
+                .HasOne(bd => bd.CourtEntity)
+                .WithMany(c => c.BookingDetailEntities)
+                .HasForeignKey(bd => bd.CourtId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CourtSlotEntity>()
+                .HasOne(cs => cs.BookingDetail)
+                .WithMany(bd => bd.CourtSlots)
+                .HasForeignKey(cs => cs.BookingDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CourtImageEntity>()
                 .HasOne(ci => ci.BadmintonCourt)
@@ -89,12 +95,6 @@ namespace DataAccessObject
                 .WithMany(tc => tc.Courts)
                 .HasForeignKey(c => c.TypeOfCourtId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<CourtSlotEntity>()
-                .HasOne(cs => cs.Court)
-                .WithMany(c => c.CourtSlots)
-                .HasForeignKey(cs => cs.CourtNumberId)
-                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<BadmintonCourtEntity>()
                .HasOne(bc => bc.CourtOwner)

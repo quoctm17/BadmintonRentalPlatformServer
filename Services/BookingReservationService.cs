@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects;
 using DTOs.Response.BookingReservation;
 using Microsoft.Extensions.Logging;
 using Repositories.Interface;
@@ -25,5 +26,9 @@ namespace Services
         public Task<Result<bool>> Delete(int id) => _repository.Delete(id);
         public Task<Result<ICollection<BookingReservationViewModel>>> GetAll() => _repository.GetAll();
         public Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request) => _repository.Update(id, request);
+        public async Task<Result<List<BookingDetailEntity>>> GetAllBookingDetails()
+        {
+            return await _repository.GetAllBookingDetails();
+        }
     }
 }

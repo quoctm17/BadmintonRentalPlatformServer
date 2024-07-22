@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Commons;
+﻿using BadmintonRentalPlatformAPI.Configuration.Domain;
+using BusinessObjects.Commons;
 
 namespace BadmintonRentalPlatformAPI.Configuration
 {

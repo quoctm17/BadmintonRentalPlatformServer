@@ -6,8 +6,10 @@ using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects;
 using Repositories.Interface;
 
 namespace Services
@@ -21,5 +23,9 @@ namespace Services
         }
 
         public Task<Result<CourtSlotDto>> Create(CourtSlotRequest request) => CourtSlotDAO.Instance.Create(request);
+        public async Task<Result<List<CourtSlotEntity>>> GetAllCourtSlots()
+        {
+            return await _repository.GetAllCourtSlots();
+        }
     }
 }

@@ -35,6 +35,10 @@ namespace Services
         public Task<Result<UserDto>> Update(UpdateUserRequest request) => _repository.Update(request);
 
         public Task<Result<UserDto>> Delete(int id) => _repository.Delete(id);
+        public string GenerateToken(string email)
+        {
+            return _repository.GenerateJwtToken(email);
+        }
 
         public Task<Result<UserDto>> Create(CreateUserRequest request) => _repository.Create(request);
     }

@@ -53,7 +53,7 @@ namespace DataAccessObject
                     UserId = request.UserId,
                     Notes = request.Notes,
                     CreateAt = DateTime.Now,
-                    TotalPrice = 0
+                    TotalPrice = request.TotalPrice
                 };
                 await _context.BookingReservations.AddAsync(bookingReservationEntity);
                 var bookingDetails = new List<BookingDetailEntity>();
@@ -207,6 +207,12 @@ namespace DataAccessObject
                     Message = ex.Message,
                 };
             }
+        }
+
+        public async Task<BookingReservationEntity?> GetDetail(int bookingId)
+        {
+            return await _context.BookingReservations
+                .FindAsync(bookingId);
         }
     }
 }

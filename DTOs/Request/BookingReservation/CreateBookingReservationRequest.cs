@@ -18,6 +18,7 @@ namespace DTOs.Request.BookingReservation
         [Required(ErrorMessage = MessageConstant.Vi.BookingReservation.Require.NotesRequired)]
         public string Notes { get; set; }
         public int BadmintonCourtId { get; set; }
+        public int TotalPrice { get; set; }
         public List<BookingCourtRequest> BookingCourtSlotRequests { get; set; }
     }
 }

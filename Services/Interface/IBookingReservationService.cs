@@ -17,5 +17,6 @@ namespace Services.Interface
         Task<Result<ICollection<BookingReservationViewModel>>> GetAll();
         Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request);
         public Task<Result<List<BookingDetailEntity>>> GetAllBookingDetails();
+        public Task<Result<BookingReservationEntity?>> GetDetail(int bookingId);
     }
 }

@@ -4,6 +4,7 @@ using BusinessObjects.Constants;
 using DTOs;
 using DTOs.Request.Authentication;
 using DTOs.Response.Authentication;
+using DTOs.Response.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,17 +46,13 @@ namespace BadmintonRentalPlatformAPI.Controllers
         }
 
         [HttpPost("login-admin")]
-        public async Task<IActionResult> LoginAdmin(string email, string password)
+        public async Task<IActionResult> LoginAdmin(LoginAdminRequest request)
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
             var emailAdmin = _configuration.GetSection("AdminAccount:Email").Value ?? string.Empty;
             var passwordAdmin = _configuration.GetSection("AdminAccount:Password").Value ?? string.Empty;
-            if (email.Equals(emailAdmin) && password.Equals(passwordAdmin))
+            if (request.Email.Equals(emailAdmin) && request.Password.Equals(passwordAdmin))
             {
-                var token = _userService.GenerateToken(email);
+                var token = _userService.GenerateToken(request.Email);
                 return Ok(new Result<string>()
                 {
                     StatusCode = HttpStatusCode.OK,

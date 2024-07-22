@@ -38,6 +38,12 @@ namespace DataAccessObject
             }
         }
 
+        public async Task<CourtEntity?> GetDetail(int id)
+        {
+            return await _context.Courts
+                .FirstOrDefaultAsync(court => court.Id == id);
+        }
+
         public async Task<Result<CourtDto>> Create(CourtRequest request)
         {
             try

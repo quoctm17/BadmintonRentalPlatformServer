@@ -54,5 +54,11 @@ namespace BadmintonRentalPlatformAPI.Controllers
             Result<bool> result = await _service.Update(id, request);
             return StatusCode((int)result.StatusCode, result);
         }
+
+        [HttpGet("get-all-booking-details")]
+        public async Task<IActionResult> GetAllBookingDetails()
+        {
+            return Ok(await _service.GetAllBookingDetails());
+        }
     }
 }

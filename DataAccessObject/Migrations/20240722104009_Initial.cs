@@ -184,7 +184,8 @@ namespace DataAccessObject.Migrations
                     CourtCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TypeOfCourtId = table.Column<int>(type: "int", nullable: false),
                     BadmintonCourtId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false)
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    CourtImage = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -233,33 +234,13 @@ namespace DataAccessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourtSlots",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CourtNumberId = table.Column<int>(type: "int", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CourtSlots", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CourtSlots_Courts_CourtNumberId",
-                        column: x => x.CourtNumberId,
-                        principalTable: "Courts",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BookingDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookingId = table.Column<int>(type: "int", nullable: false),
-                    CourtSlotId = table.Column<int>(type: "int", nullable: false),
+                    CourtId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
@@ -272,9 +253,37 @@ namespace DataAccessObject.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookingDetails_CourtSlots_CourtSlotId",
-                        column: x => x.CourtSlotId,
-                        principalTable: "CourtSlots",
+                        name: "FK_BookingDetails_Courts_CourtId",
+                        column: x => x.CourtId,
+                        principalTable: "Courts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourtSlots",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BookingDetailId = table.Column<int>(type: "int", nullable: false),
+                    CourtEntityId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourtSlots", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CourtSlots_BookingDetails_BookingDetailId",
+                        column: x => x.BookingDetailId,
+                        principalTable: "BookingDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourtSlots_Courts_CourtEntityId",
+                        column: x => x.CourtEntityId,
+                        principalTable: "Courts",
                         principalColumn: "Id");
                 });
 
@@ -289,9 +298,9 @@ namespace DataAccessObject.Migrations
                 column: "BookingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingDetails_CourtSlotId",
+                name: "IX_BookingDetails_CourtId",
                 table: "BookingDetails",
-                column: "CourtSlotId");
+                column: "CourtId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookingReservations_UserId",
@@ -314,9 +323,14 @@ namespace DataAccessObject.Migrations
                 column: "TypeOfCourtId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourtSlots_CourtNumberId",
+                name: "IX_CourtSlots_BookingDetailId",
                 table: "CourtSlots",
-                column: "CourtNumberId");
+                column: "BookingDetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourtSlots_CourtEntityId",
+                table: "CourtSlots",
+                column: "CourtEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",
@@ -349,10 +363,10 @@ namespace DataAccessObject.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BookingDetails");
+                name: "CourtImages");
 
             migrationBuilder.DropTable(
-                name: "CourtImages");
+                name: "CourtSlots");
 
             migrationBuilder.DropTable(
                 name: "Notifications");
@@ -361,13 +375,13 @@ namespace DataAccessObject.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "CourtSlots");
-
-            migrationBuilder.DropTable(
-                name: "BookingReservations");
+                name: "BookingDetails");
 
             migrationBuilder.DropTable(
                 name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "BookingReservations");
 
             migrationBuilder.DropTable(
                 name: "Courts");

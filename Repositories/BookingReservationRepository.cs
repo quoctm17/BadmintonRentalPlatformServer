@@ -7,19 +7,28 @@ using Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects;
 
 namespace Repositories
 {
     public class BookingReservationRepository : IBookingReservationRepository
     {
-        private readonly BookingReservationDAO bookingReservationDAO = new BookingReservationDAO();
-        public BookingReservationRepository() { }
 
-        public Task<Result<bool>> Create(CreateBookingReservationRequest request) => bookingReservationDAO.Create(request);
-        public Task<Result<bool>> Delete(int id) => bookingReservationDAO.Delete(id);
-        public Task<Result<ICollection<BookingReservationViewModel>>> GetAll() => bookingReservationDAO.GetAll();
-        public Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request) => bookingReservationDAO.Update(id, request);
+
+        public async Task<Result<bool>> Create(CreateBookingReservationRequest request) => await BookingReservationDAO.Instance.Create(request);
+        public async Task<Result<bool>> Delete(int id) => await BookingReservationDAO.Instance.Delete(id);
+        public async Task<Result<ICollection<BookingReservationViewModel>>> GetAll() => await BookingReservationDAO.Instance.GetAll();
+        public async Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request) => await BookingReservationDAO.Instance.Update(id, request);
+        public async Task<Result<List<BookingDetailEntity>>> GetAllBookingDetails()
+        {
+            return new Result<List<BookingDetailEntity>>()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = await BookingDetailDAO.Instance.GetAllBookingDetails()
+            };
+        }
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using DTOs.Request.CourtSlot;
 using Mapster;
 using DTOs.Response.CourtSlot;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessObject
 {
@@ -34,6 +35,12 @@ namespace DataAccessObject
                 }
                 return instance;
             }
+        }
+
+        public async Task AddNew(CourtSlotEntity courtSlotEntity)
+        {
+            await _context.CourtSlots.AddAsync(courtSlotEntity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Result<CourtSlotDto>> Create(CourtSlotRequest request)
@@ -70,5 +77,10 @@ namespace DataAccessObject
             }
         }
 
+        public async Task<List<CourtSlotEntity>> GetAllCourtSlots()
+        {
+            return await _context.CourtSlots
+                .ToListAsync();
+        }
     }
 }

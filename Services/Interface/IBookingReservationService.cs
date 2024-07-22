@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects;
 using DTOs.Response.BookingReservation;
 
 namespace Services.Interface
@@ -15,5 +16,6 @@ namespace Services.Interface
         Task<Result<bool>> Delete(int id);
         Task<Result<ICollection<BookingReservationViewModel>>> GetAll();
         Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request);
+        public Task<Result<List<BookingDetailEntity>>> GetAllBookingDetails();
     }
 }

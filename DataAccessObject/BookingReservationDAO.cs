@@ -23,14 +23,14 @@ namespace DataAccessObject
     public class BookingReservationDAO
     {
         private readonly AppDbContext _context;
-        //private static BookingReservationDAO instance;
+        private static BookingReservationDAO instance;
 
         public BookingReservationDAO()
         {
             _context = new AppDbContext();
         }
 
-   /*     public static BookingReservationDAO Instance
+        public static BookingReservationDAO Instance
         {
             get
             {
@@ -40,53 +40,57 @@ namespace DataAccessObject
                 }
                 return instance;
             }
-        }*/
+        }
 
         public async Task<Result<bool>> Create(CreateBookingReservationRequest request)
         {
             try
             {
-                UserEntity user = await _context.Users
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(x => x.Id.Equals(request.UserId))
-                    ?? throw new BadRequestException(MessageConstant.Vi.User.Fail.NotFoundUser);
-
-                BookingReservationEntity bookingReservation = new BookingReservationEntity
+                BookingReservationEntity bookingReservationEntity = new BookingReservationEntity()
                 {
-                    UserId = user.Id,
-                    CreateAt = DateTime.Now,
                     BookingStatus = BookingStatusEnum.PAYING.GetDescriptionFromEnum(),
                     PaymentStatus = PaymentStatusEnum.PENDING.GetDescriptionFromEnum(),
+                    UserId = request.UserId,
                     Notes = request.Notes,
+                    CreateAt = DateTime.Now,
+                    TotalPrice = 0
                 };
-
-                bookingReservation.BookingDetails = new List<BookingDetailEntity>();
-
-                foreach (var courtSlotId in request.CourtSlotId)
+                await _context.BookingReservations.AddAsync(bookingReservationEntity);
+                var bookingDetails = new List<BookingDetailEntity>();
+                var slots = new List<CourtSlotEntity>();
+                foreach (var item in request.BookingCourtSlotRequests)
                 {
-                    CourtSlotEntity courtSlot = await _context.CourtSlots.Include(court => court.Court)
-                        .AsNoTracking()
-                        .SingleOrDefaultAsync(x => x.Id == courtSlotId)
-                        ?? throw new Exception(MessageConstant.Vi.CourtSlot.Fail.NotFoundCourtSlot);
-
-                    bookingReservation.BookingDetails.Add(new BookingDetailEntity
+                    var court = await CourtDAO.Instance.GetDetail(item.CourtId);
+                    var bookingDetail = new BookingDetailEntity()
                     {
-                        BookingReservation = bookingReservation,
-                        CourtSlotId = courtSlotId,
-                        Price = courtSlot.Court.Price,
-                    });
-
-                    bookingReservation.TotalPrice += courtSlot.Court.Price;
+                        BookingReservation = bookingReservationEntity,
+                        CourtId = item.CourtId,
+                        Price = 0
+                    };
+                    bookingDetails.Add(bookingDetail);
+                    foreach (var slot in item.BookingCourtSlotRequests)
+                    {
+                        /*await CourtSlotDAO.Instance.AddNew(new CourtSlotEntity()
+                        {
+                            BookingDetail = bookingDetail,
+                            StartTime = slot.StartTime,
+                            EndTime = slot.EndTime,
+                            DateTime = item.Date
+                        });*/
+                        slots.Add(new CourtSlotEntity()
+                        {
+                            BookingDetail = bookingDetail,
+                            StartTime = slot.StartTime,
+                            EndTime = slot.EndTime,
+                            DateTime = item.Date
+                        });
+                    }
                 }
-
-                await _context.BookingReservations.AddAsync(bookingReservation);
-                bool isSuccessful = await _context.SaveChangesAsync() > 0;
-
-                if (!isSuccessful)
-                {
-                    throw new Exception(MessageConstant.Vi.BookingReservation.Fail.CreateBookingReservation);
-                }
-
+                _context.ChangeTracker.Clear();
+                await _context.BookingReservations.AddAsync(bookingReservationEntity);
+                await _context.BookingDetails.AddRangeAsync(bookingDetails);
+                await _context.CourtSlots.AddRangeAsync(slots);
+                await _context.SaveChangesAsync();
                 return new Result<bool>
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -99,7 +103,7 @@ namespace DataAccessObject
                 return new Result<bool>
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Message = ex.Message,
+                    Message = ex.InnerException.ToString(),
                 };
             }
         }

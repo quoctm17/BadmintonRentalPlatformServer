@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessObject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240715084411_Initial")]
+    [Migration("20240722104009_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -81,7 +81,7 @@ namespace DataAccessObject.Migrations
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CourtSlotId")
+                    b.Property<int>("CourtId")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
@@ -91,7 +91,7 @@ namespace DataAccessObject.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.HasIndex("CourtSlotId");
+                    b.HasIndex("CourtId");
 
                     b.ToTable("BookingDetails");
                 });
@@ -147,6 +147,10 @@ namespace DataAccessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CourtImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
@@ -198,8 +202,14 @@ namespace DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CourtNumberId")
+                    b.Property<int>("BookingDetailId")
                         .HasColumnType("int");
+
+                    b.Property<int?>("CourtEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
@@ -209,7 +219,9 @@ namespace DataAccessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourtNumberId");
+                    b.HasIndex("BookingDetailId");
+
+                    b.HasIndex("CourtEntityId");
 
                     b.ToTable("CourtSlots");
                 });
@@ -414,15 +426,15 @@ namespace DataAccessObject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusinessObjects.CourtSlotEntity", "CourtSlot")
-                        .WithMany("BookingDetails")
-                        .HasForeignKey("CourtSlotId")
+                    b.HasOne("BusinessObjects.CourtEntity", "CourtEntity")
+                        .WithMany("BookingDetailEntities")
+                        .HasForeignKey("CourtId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("BookingReservation");
 
-                    b.Navigation("CourtSlot");
+                    b.Navigation("CourtEntity");
                 });
 
             modelBuilder.Entity("BusinessObjects.BookingReservationEntity", b =>
@@ -468,13 +480,17 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.CourtSlotEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.CourtEntity", "Court")
+                    b.HasOne("BusinessObjects.BookingDetailEntity", "BookingDetail")
                         .WithMany("CourtSlots")
-                        .HasForeignKey("CourtNumberId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("BookingDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Court");
+                    b.HasOne("BusinessObjects.CourtEntity", null)
+                        .WithMany("CourtSlots")
+                        .HasForeignKey("CourtEntityId");
+
+                    b.Navigation("BookingDetail");
                 });
 
             modelBuilder.Entity("BusinessObjects.NotificationEntity", b =>
@@ -521,6 +537,11 @@ namespace DataAccessObject.Migrations
                     b.Navigation("Courts");
                 });
 
+            modelBuilder.Entity("BusinessObjects.BookingDetailEntity", b =>
+                {
+                    b.Navigation("CourtSlots");
+                });
+
             modelBuilder.Entity("BusinessObjects.BookingReservationEntity", b =>
                 {
                     b.Navigation("BookingDetails");
@@ -530,12 +551,9 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.CourtEntity", b =>
                 {
-                    b.Navigation("CourtSlots");
-                });
+                    b.Navigation("BookingDetailEntities");
 
-            modelBuilder.Entity("BusinessObjects.CourtSlotEntity", b =>
-                {
-                    b.Navigation("BookingDetails");
+                    b.Navigation("CourtSlots");
                 });
 
             modelBuilder.Entity("BusinessObjects.PaymentEntity", b =>

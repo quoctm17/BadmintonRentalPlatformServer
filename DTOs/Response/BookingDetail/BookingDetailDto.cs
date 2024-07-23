@@ -13,5 +13,6 @@ namespace DTOs.Response.BookingDetail
         public int BookingId { get; set; }
         public int CourtSlotId { get; set; }
         public float Price { get; set; }
+
     }
 }

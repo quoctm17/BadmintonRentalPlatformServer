@@ -72,6 +72,7 @@ try
     await Seed.SeedCourts(context);
     await Seed.SeedPayments(context);
     await Seed.SeedCourtImages(context);
+    await Seed.SeedBookings(context);
 
 }
 catch (Exception ex)

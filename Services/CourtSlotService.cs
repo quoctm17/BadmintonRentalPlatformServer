@@ -28,9 +28,10 @@ namespace Services
             return await _repository.GetAllCourtSlots();
         }
 
-        public async Task<Result<List<CourtSlotEntity>>> GetAllCourtSlotsByDateAndBadmintonCourt(int badmintonCourtId, DateTime date)
+        public async Task<Result<List<CourtSlotTimeDto>>> GetAllCourtSlotsByDateAndBadmintonCourt(int badmintonCourtId, DateTime date)
         {
             return await _repository.GetAllSlotByDateAndBadmintonCourt(badmintonCourtId, date);
         }
+
     }
 }

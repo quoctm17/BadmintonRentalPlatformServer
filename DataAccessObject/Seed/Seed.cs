@@ -142,5 +142,70 @@ namespace DataAccessObject.Seed
                 await _context.SaveChangesAsync();
             }
         }
+
+        public static async Task SeedBookings(AppDbContext _context)
+        {
+            if (!await _context.BookingReservations.AnyAsync())
+            {
+                var user = await _context.Users.FirstOrDefaultAsync();
+                var court = await _context.BadmintonCourts.Include(bc => bc.Courts).FirstOrDefaultAsync();
+
+                if (user != null && court != null)
+                {
+                    var bookingReservation = new BookingReservationEntity
+                    {
+                        UserId = user.Id,
+                        BadmintonCourtId = court.Id,
+                        CreateAt = DateTime.Now,
+                        BookingStatus = "Pending",
+                        PaymentStatus = "Pending",
+                        TotalPrice = 0,
+                        Notes = "Seed data booking",
+                        Transactions = new List<TransactionEntity>(),
+                        BookingDetails = new List<BookingDetailEntity>()
+                    };
+
+                    var dates = new List<DateTime> { DateTime.Now, DateTime.Now.AddDays(1) };
+                    var courtDetails = court.Courts.Take(2).ToList(); // Lấy 2 Court đầu tiên
+
+                    foreach (var date in dates)
+                    {
+                        foreach (var courtDetail in courtDetails)
+                        {
+                            var courtSlots = new List<CourtSlotEntity>();
+
+                            for (int i = 0; i < 3; i++) // Tạo 3 TimeSlot cho mỗi BookingDetail
+                            {
+                                var startTime = new TimeSpan(7 + i * 2, 0, 0); // Mỗi slot cách nhau 2 giờ
+                                var endTime = startTime.Add(new TimeSpan(0, 30, 0)); // Thêm 30 phút vào StartTime
+
+                                courtSlots.Add(new CourtSlotEntity
+                                {
+                                    StartTime = startTime,
+                                    EndTime = endTime,
+                                    DateTime = date,
+                                });
+                            }
+
+                            var bookingDetail = new BookingDetailEntity
+                            {
+                                CourtId = courtDetail.Id,
+                                CourtEntity = courtDetail,
+                                Price = courtDetail.Price * courtSlots.Count,
+                                CourtSlots = courtSlots
+                            };
+
+                            bookingReservation.BookingDetails.Add(bookingDetail);
+                            bookingReservation.TotalPrice += bookingDetail.Price;
+                        }
+                    }
+
+                    await _context.BookingReservations.AddAsync(bookingReservation);
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+
+
     }
 }

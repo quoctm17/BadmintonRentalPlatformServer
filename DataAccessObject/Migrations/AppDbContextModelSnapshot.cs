@@ -101,6 +101,9 @@ namespace DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BadmintonCourtId")
+                        .HasColumnType("int");
+
                     b.Property<string>("BookingStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -123,6 +126,8 @@ namespace DataAccessObject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BadmintonCourtId");
 
                     b.HasIndex("UserId");
 
@@ -436,11 +441,19 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.BookingReservationEntity", b =>
                 {
+                    b.HasOne("BusinessObjects.BadmintonCourtEntity", "BadmintonCourt")
+                        .WithMany("BookingReservations")
+                        .HasForeignKey("BadmintonCourtId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BusinessObjects.UserEntity", "User")
                         .WithMany("BookingReservations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BadmintonCourt");
 
                     b.Navigation("User");
                 });
@@ -529,6 +542,8 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.BadmintonCourtEntity", b =>
                 {
+                    b.Navigation("BookingReservations");
+
                     b.Navigation("CourtImages");
 
                     b.Navigation("Courts");

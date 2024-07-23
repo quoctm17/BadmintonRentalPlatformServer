@@ -142,7 +142,6 @@ namespace DataAccessObject.Seed
                 await _context.SaveChangesAsync();
             }
         }
-
         public static async Task SeedBookings(AppDbContext _context)
         {
             if (!await _context.BookingReservations.AnyAsync())
@@ -184,6 +183,7 @@ namespace DataAccessObject.Seed
                                     StartTime = startTime,
                                     EndTime = endTime,
                                     DateTime = date,
+                                    CourtId = courtDetail.Id // Cập nhật CourtId cho CourtSlotEntity
                                 });
                             }
 
@@ -202,10 +202,26 @@ namespace DataAccessObject.Seed
 
                     await _context.BookingReservations.AddAsync(bookingReservation);
                     await _context.SaveChangesAsync();
+
+                    // Seed Transactions
+                    var payment = await _context.Payments.FirstOrDefaultAsync(p => p.PaymentMethod == "Cash");
+                    if (payment != null)
+                    {
+                        var transaction = new TransactionEntity
+                        {
+                            GrossAmount = bookingReservation.TotalPrice,
+                            Type = "Payment",
+                            CreateAt = DateTime.Now,
+                            Status = "Success",
+                            PaymentId = payment.Id,
+                            BookingReservationId = bookingReservation.Id // Liên kết với BookingReservation
+                        };
+                        await _context.Transactions.AddAsync(transaction);
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
         }
-
 
     }
 }

@@ -156,8 +156,7 @@ namespace DataAccessObject.Migrations
                         name: "FK_BookingReservations_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -222,22 +221,22 @@ namespace DataAccessObject.Migrations
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentId = table.Column<int>(type: "int", nullable: false),
-                    BookingReservationEntityId = table.Column<int>(type: "int", nullable: true)
+                    BookingReservationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_BookingReservations_BookingReservationEntityId",
-                        column: x => x.BookingReservationEntityId,
+                        name: "FK_Transactions_BookingReservations_BookingReservationId",
+                        column: x => x.BookingReservationId,
                         principalTable: "BookingReservations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Payments_PaymentId",
                         column: x => x.PaymentId,
                         principalTable: "Payments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -275,8 +274,8 @@ namespace DataAccessObject.Migrations
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BookingDetailId = table.Column<int>(type: "int", nullable: false),
-                    CourtEntityId = table.Column<int>(type: "int", nullable: true)
+                    CourtId = table.Column<int>(type: "int", nullable: false),
+                    BookingDetailId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -288,8 +287,8 @@ namespace DataAccessObject.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CourtSlots_Courts_CourtEntityId",
-                        column: x => x.CourtEntityId,
+                        name: "FK_CourtSlots_Courts_CourtId",
+                        column: x => x.CourtId,
                         principalTable: "Courts",
                         principalColumn: "Id");
                 });
@@ -340,9 +339,9 @@ namespace DataAccessObject.Migrations
                 column: "BookingDetailId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourtSlots_CourtEntityId",
+                name: "IX_CourtSlots_CourtId",
                 table: "CourtSlots",
-                column: "CourtEntityId");
+                column: "CourtId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",
@@ -350,9 +349,9 @@ namespace DataAccessObject.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_BookingReservationEntityId",
+                name: "IX_Transactions_BookingReservationId",
                 table: "Transactions",
-                column: "BookingReservationEntityId");
+                column: "BookingReservationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_PaymentId",

@@ -2,6 +2,7 @@
 using System.Data;
 using BusinessObjects;
 using Microsoft.Extensions.Configuration;
+
 namespace DataAccessObject
 {
     public class AppDbContext : DbContext
@@ -58,8 +59,8 @@ namespace DataAccessObject
                 .HasOne(br => br.User)
                 .WithMany(u => u.BookingReservations)
                 .HasForeignKey(br => br.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<BookingReservationEntity>()
                 .HasOne(br => br.BadmintonCourt)
                 .WithMany(bc => bc.BookingReservations)
@@ -83,6 +84,24 @@ namespace DataAccessObject
                 .WithMany(bd => bd.CourtSlots)
                 .HasForeignKey(cs => cs.BookingDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CourtSlotEntity>()
+                .HasOne(cs => cs.CourtEntity)
+                .WithMany(ce => ce.CourtSlots)
+                .HasForeignKey(cs => cs.CourtId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TransactionEntity>()
+                .HasOne(t => t.BookingReservation)
+                .WithMany(br => br.Transactions)
+                .HasForeignKey(t => t.BookingReservationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TransactionEntity>()
+                .HasOne(t => t.Payment)
+                .WithMany(p => p.Transactions)
+                .HasForeignKey(t => t.PaymentId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CourtImageEntity>()
                 .HasOne(ci => ci.BadmintonCourt)
@@ -109,7 +128,5 @@ namespace DataAccessObject
                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
-
     }
-
 }

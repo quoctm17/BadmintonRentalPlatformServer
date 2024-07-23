@@ -1,10 +1,18 @@
 [
   {
-    "PaymentMethod": "Credit Card",
+    "PaymentMethod": "Cash",
     "PaymentStatus": "Available"
   },
   {
-    "PaymentMethod": "PayPal",
+    "PaymentMethod": "Bank Transfer",
+    "PaymentStatus": "Available"
+  },
+  {
+    "PaymentMethod": "VN PAY",
+    "PaymentStatus": "Unavailable"
+  },
+  {
+    "PaymentMethod": "Momo",
     "PaymentStatus": "Unavailable"
   }
 ]

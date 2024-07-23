@@ -20,5 +20,8 @@ namespace DTOs.Request.BookingReservation
         public int BadmintonCourtId { get; set; }
         public int TotalPrice { get; set; }
         public List<BookingCourtRequest> BookingCourtSlotRequests { get; set; }
+
+        [Required(ErrorMessage = "Payment method is required")]
+        public int PaymentId { get; set; } // Thêm PaymentId vào request
     }
 }

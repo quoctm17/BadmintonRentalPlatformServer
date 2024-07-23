@@ -215,5 +215,12 @@ namespace DataAccessObject
             return await _context.BookingReservations
                 .FindAsync(bookingId);
         }
+
+        public async Task<List<BookingReservationEntity>> GetAllBookingReservationOfUser(int userId)
+        {
+            return await _context.BookingReservations
+                .Where(booking => booking.UserId == userId)
+                .ToListAsync();
+        }
     }
 }

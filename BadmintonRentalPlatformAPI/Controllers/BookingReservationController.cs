@@ -66,5 +66,11 @@ namespace BadmintonRentalPlatformAPI.Controllers
         {
             return Ok();
         }
+
+        [HttpGet("get-all-bookings-of-user")]
+        public async Task<IActionResult> GetAllBookingsOfUser(int userId)
+        {
+            return Ok(await _service.GetAllBookingReservationOfUser(userId));
+        }
     }
 }

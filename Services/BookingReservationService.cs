@@ -35,5 +35,10 @@ namespace Services
         {
             return await _repository.GetDetailOfBookingReservation(bookingId);
         }
+
+        public async Task<Result<List<BookingReservationEntity>>> GetAllBookingReservationOfUser(int userId)
+        {
+            return await _repository.GetAllBookingOfUser(userId);
+        }
     }
 }

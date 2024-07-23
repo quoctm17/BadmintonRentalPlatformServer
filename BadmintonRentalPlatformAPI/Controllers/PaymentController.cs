@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using BusinessObjects.Constants;
+using BusinessObjects;
 using DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Net.payOS;
@@ -14,14 +16,17 @@ public class PaymentController : ControllerBase
     private readonly PayOS _payOs;
     private readonly IConfiguration _configuration;
     private readonly IBookingReservationService _bookingReservationService;
+    private readonly IPaymentService _service;
 
-    public PaymentController(IConfiguration configuration, IBookingReservationService bookingReservationService)
+
+    public PaymentController(IConfiguration configuration, IBookingReservationService bookingReservationService, IPaymentService service)
     {
         _configuration = configuration;
         _bookingReservationService = bookingReservationService;
         _payOs = new PayOS(_configuration.GetSection("PayOS:ClientID").Value!,
             _configuration.GetSection("PayOS:ApiKey").Value!,
             _configuration.GetSection("PayOS:ChecksumKey").Value!);
+        _service = service;
     }
 
     [HttpGet("payment")]
@@ -42,5 +47,14 @@ public class PaymentController : ControllerBase
             StatusCode = HttpStatusCode.OK,
             Data = createPaymentResult
         });
+    }
+
+    [HttpGet(ApiEndPointConstant.Payment.PaymentsEndpoint)]
+    [ProducesResponseType(typeof(Result<ICollection<PaymentEntity>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetAll()
+    {
+        Result<ICollection<PaymentEntity>> result = await _service.GetAll();
+        return StatusCode((int)result.StatusCode, result);
     }
 }

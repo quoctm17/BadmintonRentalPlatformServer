@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObjects
 {
@@ -13,9 +9,11 @@ namespace BusinessObjects
         public string Type { get; set; }
         public DateTime CreateAt { get; set; }
         public string Status { get; set; }
-        
         public int PaymentId { get; set; }
         public PaymentEntity Payment { get; set; }
-    }
+        public int BookingReservationId { get; set; }
 
+        [ForeignKey("BookingReservationId")]
+        public BookingReservationEntity BookingReservation { get; set; }
+    }
 }

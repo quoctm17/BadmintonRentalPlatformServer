@@ -207,7 +207,7 @@ namespace DataAccessObject.Migrations
                     b.Property<int>("BookingDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CourtEntityId")
+                    b.Property<int>("CourtId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")
@@ -223,7 +223,7 @@ namespace DataAccessObject.Migrations
 
                     b.HasIndex("BookingDetailId");
 
-                    b.HasIndex("CourtEntityId");
+                    b.HasIndex("CourtId");
 
                     b.ToTable("CourtSlots");
                 });
@@ -303,7 +303,7 @@ namespace DataAccessObject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BookingReservationEntityId")
+                    b.Property<int>("BookingReservationId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateAt")
@@ -325,7 +325,7 @@ namespace DataAccessObject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookingReservationEntityId");
+                    b.HasIndex("BookingReservationId");
 
                     b.HasIndex("PaymentId");
 
@@ -450,7 +450,7 @@ namespace DataAccessObject.Migrations
                     b.HasOne("BusinessObjects.UserEntity", "User")
                         .WithMany("BookingReservations")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("BadmintonCourt");
@@ -496,11 +496,15 @@ namespace DataAccessObject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusinessObjects.CourtEntity", null)
+                    b.HasOne("BusinessObjects.CourtEntity", "CourtEntity")
                         .WithMany("CourtSlots")
-                        .HasForeignKey("CourtEntityId");
+                        .HasForeignKey("CourtId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("BookingDetail");
+
+                    b.Navigation("CourtEntity");
                 });
 
             modelBuilder.Entity("BusinessObjects.NotificationEntity", b =>
@@ -516,15 +520,19 @@ namespace DataAccessObject.Migrations
 
             modelBuilder.Entity("BusinessObjects.TransactionEntity", b =>
                 {
-                    b.HasOne("BusinessObjects.BookingReservationEntity", null)
+                    b.HasOne("BusinessObjects.BookingReservationEntity", "BookingReservation")
                         .WithMany("Transactions")
-                        .HasForeignKey("BookingReservationEntityId");
+                        .HasForeignKey("BookingReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BusinessObjects.PaymentEntity", "Payment")
                         .WithMany("Transactions")
                         .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("BookingReservation");
 
                     b.Navigation("Payment");
                 });

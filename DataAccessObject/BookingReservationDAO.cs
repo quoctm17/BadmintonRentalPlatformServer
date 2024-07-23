@@ -41,11 +41,24 @@ namespace DataAccessObject
                 return instance;
             }
         }
-
         public async Task<Result<bool>> Create(CreateBookingReservationRequest request)
         {
             try
             {
+                var existingCourtIds = await _context.Courts.Select(c => c.Id).ToListAsync();
+                foreach (var bookingCourt in request.BookingCourtSlotRequests)
+                {
+                    if (!existingCourtIds.Contains(bookingCourt.CourtId))
+                    {
+                        return new Result<bool>
+                        {
+                            StatusCode = HttpStatusCode.BadRequest,
+                            Message = $"Sân với ID {bookingCourt.CourtId} không tồn tại.",
+                            Data = false
+                        };
+                    }
+                }
+
                 BookingReservationEntity bookingReservationEntity = new BookingReservationEntity()
                 {
                     BookingStatus = BookingStatusEnum.PAYING.GetDescriptionFromEnum(),
@@ -56,37 +69,75 @@ namespace DataAccessObject
                     TotalPrice = request.TotalPrice,
                     BadmintonCourtId = request.BadmintonCourtId
                 };
-                await _context.BookingReservations.AddAsync(bookingReservationEntity);
+
                 var bookingDetails = new List<BookingDetailEntity>();
                 var slots = new List<CourtSlotEntity>();
+
                 foreach (var item in request.BookingCourtSlotRequests)
                 {
-                    var court = await CourtDAO.Instance.GetDetail(item.CourtId);
+                    var court = await _context.Courts.FindAsync(item.CourtId);
+                    if (court == null)
+                    {
+                        return new Result<bool>
+                        {
+                            StatusCode = HttpStatusCode.BadRequest,
+                            Message = $"Sân với ID {item.CourtId} không tồn tại.",
+                            Data = false
+                        };
+                    }
+
                     var bookingDetail = new BookingDetailEntity()
                     {
                         BookingReservation = bookingReservationEntity,
                         CourtId = item.CourtId,
-                        Price = 0
+                        Price = 0 // Sẽ được tính sau
                     };
+
+                    // Tính tổng số slot và giá trị
+                    int totalSlots = item.BookingCourtSlotRequests.Count;
+                    float pricePerSlot = court.Price; // Lấy đơn giá của slot từ Court entity
+
+                    bookingDetail.Price = totalSlots * pricePerSlot;
                     bookingDetails.Add(bookingDetail);
+
                     foreach (var slot in item.BookingCourtSlotRequests)
                     {
-                        /*await CourtSlotDAO.Instance.AddNew(new CourtSlotEntity()
+                        // Kiểm tra điều kiện EndTime cách StartTime 30 phút
+                        if ((slot.EndTime - slot.StartTime).TotalMinutes != 30)
                         {
-                            BookingDetail = bookingDetail,
-                            StartTime = slot.StartTime,
-                            EndTime = slot.EndTime,
-                            DateTime = item.Date
-                        });*/
+                            return new Result<bool>
+                            {
+                                StatusCode = HttpStatusCode.BadRequest,
+                                Message = "Thời gian kết thúc phải cách thời gian bắt đầu 30 phút.",
+                                Data = false
+                            };
+                        }
+
+                        // Kiểm tra xem slot đã được đặt hay chưa
+                        bool isSlotBooked = await _context.CourtSlots
+                            .AnyAsync(s => s.CourtId == slot.CourtId && s.DateTime.Date == item.Date.Date && s.StartTime == slot.StartTime && s.EndTime == slot.EndTime);
+
+                        if (isSlotBooked)
+                        {
+                            return new Result<bool>
+                            {
+                                StatusCode = HttpStatusCode.BadRequest,
+                                Message = $"Khung giờ từ {slot.StartTime} đến {slot.EndTime} cho sân với ID {slot.CourtId} vào ngày {item.Date.ToShortDateString()} đã được đặt trước.",
+                                Data = false
+                            };
+                        }
+
                         slots.Add(new CourtSlotEntity()
                         {
                             BookingDetail = bookingDetail,
                             StartTime = slot.StartTime,
                             EndTime = slot.EndTime,
-                            DateTime = item.Date
+                            DateTime = item.Date,
+                            CourtId = item.CourtId
                         });
                     }
                 }
+
                 _context.ChangeTracker.Clear();
                 await _context.BookingReservations.AddAsync(bookingReservationEntity);
                 await _context.BookingDetails.AddRangeAsync(bookingDetails);
@@ -104,10 +155,12 @@ namespace DataAccessObject
                 return new Result<bool>
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Message = ex.InnerException.ToString(),
+                    Message = ex.InnerException?.ToString(),
                 };
             }
         }
+
+
 
         public async Task<Result<ICollection<BookingReservationViewModel>>> GetAll()
         {

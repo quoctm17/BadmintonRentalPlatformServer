@@ -63,7 +63,7 @@ public class UserDAO
         return (guidClaim, new Result<LoginResponse> { Data = loginResponse, StatusCode = HttpStatusCode.OK }, user);
     }
 
-    public async Task<(Tuple<string, Guid>, Result<RegisterResponse>, UserEntity user)> Register(RegisterRequest request)
+    public async Task<RegisterResponse> Register(RegisterRequest request)
     {
         var listUser = await _context.Users
             .Where(user => user.Email.Equals(request.Email))
@@ -75,40 +75,33 @@ public class UserDAO
         }
 
         UserEntity newUser = request.Adapt<UserEntity>();
+        newUser.Address = "";
+        newUser.ProfileImage = "default";
+        newUser.RoleId = 1;
 
         newUser.PasswordEncrypt = "PasswordEncrypt";
-
-        try
+        await _context.Users.AddAsync(newUser);
+        bool isSuccessful = await _context.SaveChangesAsync() > 0;
+        if (!isSuccessful)
         {
-            await _context.Users.AddAsync(newUser);
-            bool isSuccessful = await _context.SaveChangesAsync() > 0;
-            if (!isSuccessful)
-            {
-                throw new Exception(MessageConstant.Vi.User.Fail.CreateUser);
-            }
-
-            newUser = await _context.Users.Include(x => x.Role)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(predicate: x => x.Id.Equals(newUser.Id));
-
-            Tuple<string, Guid> guidClaim = null!;
-            RegisterResponse registerResponse = null!;
-
-            registerResponse = new RegisterResponse(newUser.Id, newUser.FullName, newUser.Email, newUser.Gender, newUser.DateOfBirth, newUser.Address, newUser.ProfileImage, newUser.PhoneNumber, EnumHelper.ParseEnum<RoleEnum>(newUser.Role.RoleName));
-
-            var token = JwtUtil.GenerateJwtToken(newUser, guidClaim);
-            registerResponse!.AccessToken = token;
-
-            return (guidClaim, new Result<RegisterResponse> { Data = registerResponse, StatusCode = HttpStatusCode.OK }, newUser);
+            throw new Exception(MessageConstant.Vi.User.Fail.CreateUser);
         }
-        catch (Exception ex)
-        {
-            return (null, new Result<RegisterResponse>
-            {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Message = ex.Message,
-            }, null)!;
-        }
+
+        newUser = await _context.Users
+            .Include(x => x.Role)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(predicate: x => x.Id.Equals(newUser.Id));
+
+        Tuple<string, Guid> guidClaim = null!;
+        RegisterResponse registerResponse = null!;
+
+        registerResponse = new RegisterResponse(newUser.Id, newUser.FullName, newUser.Email, newUser.Gender, newUser.DateOfBirth, newUser.Address, newUser.ProfileImage, newUser.PhoneNumber, EnumHelper.ParseEnum<RoleEnum>(newUser.Role.RoleName));
+
+        var token = JwtUtil.GenerateJwtToken(newUser, guidClaim);
+        registerResponse!.AccessToken = token;
+
+        return registerResponse;
+    
     }
 
     public async Task<Result<List<UserDto>>> GetList()

@@ -40,8 +40,8 @@ namespace BadmintonRentalPlatformAPI.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> OwnerRegister([FromBody] RegisterRequest request)
         {
-            (Tuple<string, Guid>, Result<RegisterResponse>, UserEntity) result = await _userService.Register(request);
-            return StatusCode((int)result.Item2.StatusCode, result.Item2);
+            var result = await _userService.Register(request);
+            return Ok(result);
         }
 
         [HttpPost("login-admin")]
@@ -64,5 +64,12 @@ namespace BadmintonRentalPlatformAPI.Controllers
                 Data = "Wrong username or password"
             });
         }
+
+        [HttpPost("register-user")]
+        public async Task<IActionResult> Register()
+        {
+            return Ok();
+        }
+        
     }
 }

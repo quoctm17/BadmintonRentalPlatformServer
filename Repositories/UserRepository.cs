@@ -36,7 +36,26 @@ namespace Repositories
         Task<Result<List<UserDto>>> IUserRepository.GetList() => UserDAO.Instance.GetList();
 
         public Task<(Tuple<string, Guid>, Result<LoginResponse>, UserEntity user)> Login(LoginRequest request) => UserDAO.Instance.Login(request);
-        public Task<(Tuple<string, Guid>, Result<RegisterResponse>, UserEntity user)> Register(RegisterRequest request) => UserDAO.Instance.Register(request);
+
+        public async Task<Result<RegisterResponse>> Register(RegisterRequest request)
+        {
+            try
+            {
+                return new Result<RegisterResponse>()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = await UserDAO.Instance.Register(request)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Result<RegisterResponse>()
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ex.Message
+                };
+            }
+        }
 
         public Task<Result<UserDto>> GetById(int id) => UserDAO.Instance.GetById(id);
 

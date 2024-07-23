@@ -142,6 +142,15 @@ namespace DataAccessObject
                 await _context.BookingReservations.AddAsync(bookingReservationEntity);
                 await _context.BookingDetails.AddRangeAsync(bookingDetails);
                 await _context.CourtSlots.AddRangeAsync(slots);
+                await _context.Transactions.AddAsync(new TransactionEntity()
+                {
+                    CreateAt = DateTime.Now,
+                    Status = PaymentStatusEnum.PENDING.GetDescriptionFromEnum(),
+                    BookingReservationId = bookingReservationEntity.Id,
+                    Type = "PayOS",
+                    GrossAmount = bookingReservationEntity.TotalPrice,
+                    PaymentId = request.PaymentId
+                });
                 await _context.SaveChangesAsync();
                 return new Result<bool>
                 {
@@ -155,7 +164,7 @@ namespace DataAccessObject
                 return new Result<bool>
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Message = ex.InnerException?.ToString(),
+                    Message = ex.Message,
                 };
             }
         }

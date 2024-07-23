@@ -28,7 +28,7 @@ namespace Services
         
 
         public Task<(Tuple<string, Guid>, Result<LoginResponse>, UserEntity user)> Login(LoginRequest request) => _repository.Login(request);
-        public Task<(Tuple<string, Guid>, Result<RegisterResponse>, UserEntity user)> Register(RegisterRequest request) => _repository.Register(request);
+        public Task<Result<RegisterResponse>> Register(RegisterRequest request) => _repository.Register(request);
 
         public Task<Result<UserDto>> GetById(int id) => _repository.GetById(id);
 

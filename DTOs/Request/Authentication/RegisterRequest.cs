@@ -18,15 +18,9 @@ namespace DTOs.Request.Authentication
         public string Gender { get; set; } = string.Empty;
         [Required(ErrorMessage = MessageConstant.Vi.User.Require.DateOfBirthRequired)]
         public DateTime DateOfBirth { get; set; }
-        [Required(ErrorMessage = MessageConstant.Vi.User.Require.AddressRequired)]
-        public string Address { get; set; } = string.Empty;
         [Required(ErrorMessage = MessageConstant.Vi.User.Require.PasswordRequired)]
         public string Password { get; set; } = string.Empty;
-        [Required(ErrorMessage = MessageConstant.Vi.User.Require.ProfileImageRequired)]
-        public string ProfileImage { get; set; } = string.Empty;
         [Required(ErrorMessage = MessageConstant.Vi.User.Require.PhoneNumberRequired)]
         public string PhoneNumber { get; set; } = string.Empty;
-        [Required(ErrorMessage = MessageConstant.Vi.User.Require.RoleRequired)]
-        public int RoleId { get; set; }
     }
 }

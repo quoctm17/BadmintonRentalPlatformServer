@@ -41,7 +41,6 @@ namespace BadmintonRentalPlatformAPI.Controllers
         public async Task<IActionResult> OwnerRegister([FromBody] RegisterRequest request)
         {
             (Tuple<string, Guid>, Result<RegisterResponse>, UserEntity) result = await _userService.Register(request);
-
             return StatusCode((int)result.Item2.StatusCode, result.Item2);
         }
 

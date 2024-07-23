@@ -18,6 +18,7 @@ namespace Repositories.Interface
         Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request);
         public Task<Result<List<BookingDetailEntity>>> GetAllBookingDetails();
         public Task<Result<BookingReservationEntity?>> GetDetailOfBookingReservation(int bookingId);
+        public Task<Result<List<BookingReservationEntity>>> GetAllBookingOfUser(int userId);
     }
 
 }

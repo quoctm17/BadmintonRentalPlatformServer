@@ -39,5 +39,14 @@ namespace Repositories
                 Data = await BookingReservationDAO.Instance.GetDetail(bookingId)
             };
         }
+
+        public async Task<Result<List<BookingReservationEntity>>> GetAllBookingOfUser(int userId)
+        {
+            return new Result<List<BookingReservationEntity>>()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = await BookingReservationDAO.Instance.GetAllBookingReservationOfUser(userId)
+            };
+        }
     }
 }

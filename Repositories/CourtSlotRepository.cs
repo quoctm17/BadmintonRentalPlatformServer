@@ -27,14 +27,14 @@ namespace Repositories
             };
         }
 
-        public async Task<Result<List<CourtSlotEntity>>> GetAllSlotByDateAndBadmintonCourt(int badmintonCourtId, DateTime date)
+        public async Task<Result<List<CourtSlotTimeDto>>> GetAllSlotByDateAndBadmintonCourt(int badmintonCourtId, DateTime date)
         {
-            return new Result<List<CourtSlotEntity>>()
+            return new Result<List<CourtSlotTimeDto>>()
             {
                 StatusCode = HttpStatusCode.OK,
-                Data = await CourtSlotDAO.Instance.GetAllCourtSlotsByDateAndBadmintonCourt(badmintonCourtId,
-                    date)
+                Data = await CourtSlotDAO.Instance.GetAllCourtSlotsByDateAndBadmintonCourt(badmintonCourtId, date)
             };
         }
+
     }
 }

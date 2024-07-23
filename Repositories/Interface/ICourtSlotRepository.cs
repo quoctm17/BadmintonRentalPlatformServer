@@ -15,7 +15,6 @@ namespace Repositories.Interface
         Task<Result<CourtSlotDto>> Create(CourtSlotRequest request);
         public Task<Result<List<CourtSlotEntity>>> GetAllCourtSlots();
 
-        public Task<Result<List<CourtSlotEntity>>> GetAllSlotByDateAndBadmintonCourt(int badmintonCourtId,
-            DateTime date);
+        public Task<Result<List<CourtSlotTimeDto>>> GetAllSlotByDateAndBadmintonCourt(int badmintonCourtId, DateTime date);
     }
 }

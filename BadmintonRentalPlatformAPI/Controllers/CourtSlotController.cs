@@ -43,7 +43,8 @@ namespace BadmintonRentalPlatformAPI.Controllers
         [HttpGet("get-all-slot-by-date-and-badminton-court")]
         public async Task<IActionResult> GetAllCourtSlotsByDateAndBadmintonCourt(int badmintonCourtId, DateTime date)
         {
-            return Ok(await _service.GetAllCourtSlotsByDateAndBadmintonCourt(badmintonCourtId, date));
+            var result = await _service.GetAllCourtSlotsByDateAndBadmintonCourt(badmintonCourtId, date);
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

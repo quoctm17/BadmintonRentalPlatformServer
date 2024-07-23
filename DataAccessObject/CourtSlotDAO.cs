@@ -83,39 +83,27 @@ namespace DataAccessObject
                 .ToListAsync();
         }
 
-        public async Task<List<CourtSlotEntity>> GetAllCourtSlotsByDateAndBadmintonCourt(int badmintonCourtId,
-            DateTime date)
+        public async Task<List<CourtSlotTimeDto>> GetAllCourtSlotsByDateAndBadmintonCourt(int badmintonCourtId, DateTime date)
         {
-            var bookings = await _context.BookingReservations
-                .AsNoTracking()
-                .Where(booking => booking.BadmintonCourtId == badmintonCourtId)
-                .ToListAsync();
-            var listBookingDetails = new List<BookingDetailEntity>();
-            foreach (var item in bookings)
-            {
-                var bookingDetails = await _context.BookingDetails
-                    .Where(detail => detail.BookingId == item.Id)
-                    .AsNoTracking()
-                    .ToListAsync();
-                listBookingDetails.AddRange(bookingDetails);
-            }
-
             var slots = await _context.CourtSlots
                 .AsNoTracking()
-                .Where(slot => slot.DateTime.Date == date.Date)
+                .Where(slot => slot.BookingDetail.CourtEntity.BadmintonCourtId == badmintonCourtId && slot.DateTime.Date == date.Date)
+                .Include(slot => slot.BookingDetail)
+                .ThenInclude(bookingDetail => bookingDetail.CourtEntity)
                 .ToListAsync();
-            var listSlots = new List<CourtSlotEntity>();
-            foreach (var item in slots)
+
+            var slotDtos = slots.Select(slot => new CourtSlotTimeDto
             {
-                foreach (var item2 in listBookingDetails)
-                {
-                    if (item.BookingDetailId == item2.Id)
-                    {
-                        listSlots.Add(item);
-                    }
-                }
-            }
-            return listSlots;
+                Id = slot.Id,
+                StartTime = slot.StartTime,
+                EndTime = slot.EndTime,
+                DateTime = slot.DateTime,
+                BookingDetailId = slot.BookingDetailId,
+                CourtId = slot.BookingDetail.CourtId
+            }).ToList();
+
+            return slotDtos;
         }
+
     }
 }

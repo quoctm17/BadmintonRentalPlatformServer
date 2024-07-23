@@ -59,6 +59,12 @@ namespace DataAccessObject
                 .WithMany(u => u.BookingReservations)
                 .HasForeignKey(br => br.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<BookingReservationEntity>()
+                .HasOne(br => br.BadmintonCourt)
+                .WithMany(bc => bc.BookingReservations)
+                .HasForeignKey(br => br.BadmintonCourtId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<BookingDetailEntity>()
                 .HasOne(bd => bd.BookingReservation)

@@ -23,6 +23,7 @@ namespace BusinessObjects
 
         public ICollection<CourtImageEntity> CourtImages { get; set; }
         public ICollection<CourtEntity> Courts { get; set; }
+        public ICollection<BookingReservationEntity> BookingReservations { get; set; }
     }
 
 }

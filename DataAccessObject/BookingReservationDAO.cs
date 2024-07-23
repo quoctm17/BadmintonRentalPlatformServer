@@ -53,7 +53,8 @@ namespace DataAccessObject
                     UserId = request.UserId,
                     Notes = request.Notes,
                     CreateAt = DateTime.Now,
-                    TotalPrice = request.TotalPrice
+                    TotalPrice = request.TotalPrice,
+                    BadmintonCourtId = request.BadmintonCourtId
                 };
                 await _context.BookingReservations.AddAsync(bookingReservationEntity);
                 var bookingDetails = new List<BookingDetailEntity>();

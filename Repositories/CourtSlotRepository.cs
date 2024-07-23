@@ -26,5 +26,15 @@ namespace Repositories
                 Data = await CourtSlotDAO.Instance.GetAllCourtSlots()
             };
         }
+
+        public async Task<Result<List<CourtSlotEntity>>> GetAllSlotByDateAndBadmintonCourt(int badmintonCourtId, DateTime date)
+        {
+            return new Result<List<CourtSlotEntity>>()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = await CourtSlotDAO.Instance.GetAllCourtSlotsByDateAndBadmintonCourt(badmintonCourtId,
+                    date)
+            };
+        }
     }
 }

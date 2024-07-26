@@ -18,7 +18,7 @@ namespace Repositories
     {
 
 
-        public async Task<Result<bool>> Create(CreateBookingReservationRequest request) => await BookingReservationDAO.Instance.Create(request);
+        public async Task<Result<int>> Create(CreateBookingReservationRequest request) => await BookingReservationDAO.Instance.Create(request);
         public async Task<Result<bool>> Delete(int id) => await BookingReservationDAO.Instance.Delete(id);
         public async Task<Result<ICollection<BookingReservationViewModel>>> GetAll() => await BookingReservationDAO.Instance.GetAll();
         public async Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request) => await BookingReservationDAO.Instance.Update(id, request);
@@ -52,5 +52,33 @@ namespace Repositories
         {
             return await BookingReservationDAO.Instance.CancelBooking(bookingId);
         }
+
+        public async Task<Result<bool>> UpdatePaymentLinkId(int bookingId, string paymentLinkId)
+        {
+            return await BookingReservationDAO.Instance.UpdatePaymentLinkId(bookingId, paymentLinkId);
+        }
+
+        public async Task<Result<BookingReservationEntity?>> GetDetailByOrderCode(long orderCode)
+        {
+            return await BookingReservationDAO.Instance.GetDetailByOrderCode(orderCode);
+        }
+
+        public async Task<Result<bool>> UpdateTransactionStatus(int bookingId, string status)
+        {
+            return await TransactionDAO.Instance.UpdateTransactionStatus(bookingId, status);
+
+        }
+
+        public async Task<Result<bool>> UpdateBookingStatus(int bookingId, string status)
+        {
+            return await BookingReservationDAO.Instance.UpdateBookingStatus(bookingId, status);
+
+        }
+
+        public async Task<Result<BookingReservationEntity?>> GetDetailByPaymentLinkId(string paymentLinkId)
+        {
+            return await BookingReservationDAO.Instance.GetDetailByPaymentLinkId(paymentLinkId);
+        }
+
     }
 }

@@ -22,6 +22,7 @@ namespace BusinessObjects
         public string Notes { get; set; }
         public ICollection<TransactionEntity> Transactions { get; set; }
         public ICollection<BookingDetailEntity> BookingDetails { get; set; }
+        public string? PaymentLinkId { get; set; }
     }
 
 }

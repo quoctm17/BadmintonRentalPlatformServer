@@ -39,7 +39,43 @@ namespace DataAccessObject
                 return instance;
             }
         }
-        public async Task<Result<bool>> Create(CreateBookingReservationRequest request)
+
+        public async Task<Result<BookingReservationEntity?>> GetDetailByOrderCode(long orderCode)
+        {
+            try
+            {
+                var bookingReservation = await _context.BookingReservations
+                    .FirstOrDefaultAsync(br => br.Id == orderCode);
+
+                if (bookingReservation == null)
+                {
+                    return new Result<BookingReservationEntity?>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        Message = "Booking reservation not found",
+                        Data = null
+                    };
+                }
+
+                return new Result<BookingReservationEntity?>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = bookingReservation
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting booking reservation by order code");
+                return new Result<BookingReservationEntity?>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<Result<int>> Create(CreateBookingReservationRequest request)
         {
             _logger.LogInformation("CreateBookingReservationRequest: {@Request}", request); // Log request
             try
@@ -49,19 +85,19 @@ namespace DataAccessObject
                 {
                     if (!existingCourtIds.Contains(bookingCourt.CourtId))
                     {
-                        _logger.LogWarning("Court with ID {CourtId} does not exist.", bookingCourt.CourtId); // Log cảnh báo
-                        return new Result<bool>
+                        _logger.LogWarning("Court with ID {CourtId} does not exist.", bookingCourt.CourtId); // Log warning
+                        return new Result<int>
                         {
                             StatusCode = HttpStatusCode.BadRequest,
                             Message = $"Sân với ID {bookingCourt.CourtId} không tồn tại.",
-                            Data = false
+                            Data = -1
                         };
                     }
                 }
 
                 BookingReservationEntity bookingReservationEntity = new BookingReservationEntity()
                 {
-                    BookingStatus = BookingStatusEnum.PAYING.GetDescriptionFromEnum(),
+                    BookingStatus = request.PaymentId == 1 ? BookingStatusEnum.BOOKED.GetDescriptionFromEnum() : BookingStatusEnum.PAYING.GetDescriptionFromEnum(),
                     UserId = request.UserId,
                     Notes = request.Notes,
                     CreateAt = DateTime.Now,
@@ -77,12 +113,12 @@ namespace DataAccessObject
                     var court = await _context.Courts.FindAsync(item.CourtId);
                     if (court == null)
                     {
-                        _logger.LogWarning("Court with ID {CourtId} does not exist.", item.CourtId); // Log cảnh báo
-                        return new Result<bool>
+                        _logger.LogWarning("Court with ID {CourtId} does not exist.", item.CourtId);
+                        return new Result<int>
                         {
                             StatusCode = HttpStatusCode.BadRequest,
                             Message = $"Sân với ID {item.CourtId} không tồn tại.",
-                            Data = false
+                            Data = -1
                         };
                     }
 
@@ -90,43 +126,40 @@ namespace DataAccessObject
                     {
                         BookingReservation = bookingReservationEntity,
                         CourtId = item.CourtId,
-                        Price = 0 // Sẽ được tính sau
+                        Price = 0 // Will be calculated later
                     };
 
-                    // Tính tổng số slot và giá trị
                     int totalSlots = item.BookingCourtSlotRequests.Count;
-                    float pricePerSlot = court.Price; // Lấy đơn giá của slot từ Court entity
+                    float pricePerSlot = court.Price;
 
                     bookingDetail.Price = totalSlots * pricePerSlot;
                     bookingDetails.Add(bookingDetail);
 
                     foreach (var slot in item.BookingCourtSlotRequests)
                     {
-                        // Kiểm tra điều kiện EndTime cách StartTime 30 phút
                         if ((slot.EndTime - slot.StartTime).TotalMinutes != 30)
                         {
-                            _logger.LogWarning("EndTime must be 30 minutes after StartTime."); // Log cảnh báo
-                            return new Result<bool>
+                            _logger.LogWarning("EndTime must be 30 minutes after StartTime.");
+                            return new Result<int>
                             {
                                 StatusCode = HttpStatusCode.BadRequest,
                                 Message = "Thời gian kết thúc phải cách thời gian bắt đầu 30 phút.",
-                                Data = false
+                                Data = -1
                             };
                         }
 
-                        // Kiểm tra xem slot đã được đặt hay chưa
                         bool isSlotBooked = await _context.CourtSlots
                             .AnyAsync(s => s.CourtId == slot.CourtId && s.DateTime.Date == item.Date.Date && s.StartTime == slot.StartTime && s.EndTime == slot.EndTime);
 
                         if (isSlotBooked)
                         {
                             _logger.LogWarning("Time slot from {StartTime} to {EndTime} for court ID {CourtId} on date {Date} is already booked.",
-                                slot.StartTime, slot.EndTime, slot.CourtId, item.Date.ToShortDateString()); // Log cảnh báo
-                            return new Result<bool>
+                                slot.StartTime, slot.EndTime, slot.CourtId, item.Date.ToShortDateString());
+                            return new Result<int>
                             {
                                 StatusCode = HttpStatusCode.BadRequest,
                                 Message = $"Khung giờ từ {slot.StartTime} đến {slot.EndTime} cho sân với ID {slot.CourtId} vào ngày {item.Date.ToShortDateString()} đã được đặt trước.",
-                                Data = false
+                                Data = -1
                             };
                         }
 
@@ -143,7 +176,7 @@ namespace DataAccessObject
 
                 _context.ChangeTracker.Clear();
                 await _context.BookingReservations.AddAsync(bookingReservationEntity);
-                await _context.SaveChangesAsync(); // Lưu bookingReservationEntity trước
+                await _context.SaveChangesAsync(); // Save bookingReservationEntity first
 
                 await _context.BookingDetails.AddRangeAsync(bookingDetails);
                 await _context.CourtSlots.AddRangeAsync(slots);
@@ -151,27 +184,100 @@ namespace DataAccessObject
                 {
                     CreateAt = DateTime.Now,
                     Status = TransactionStatusEnum.PENDING.GetDescriptionFromEnum(),
-                    BookingReservationId = bookingReservationEntity.Id, // Sử dụng ID đã lưu
-                    Type = TransactionTypeEnum.Income, // Default to Income
+                    BookingReservationId = bookingReservationEntity.Id,
+                    Type = TransactionTypeEnum.Income,
                     GrossAmount = bookingReservationEntity.TotalPrice,
                     PaymentId = request.PaymentId
                 });
                 await _context.SaveChangesAsync();
-                _logger.LogInformation("BookingReservation created successfully."); // Log thành công
-                return new Result<bool>
+                _logger.LogInformation("BookingReservation created successfully.");
+                return new Result<int>
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Data = true,
+                    Data = bookingReservationEntity.Id,
                 };
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating BookingReservation"); // Log lỗi
+                _logger.LogError(ex, "Error creating BookingReservation");
+                return new Result<int>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ex.Message,
+                    Data = -1
+                };
+            }
+        }
+
+        public async Task<Result<bool>> UpdatePaymentLinkId(int bookingId, string paymentLinkId)
+        {
+            try
+            {
+                var bookingReservation = await _context.BookingReservations.FindAsync(bookingId);
+                if (bookingReservation == null)
+                {
+                    return new Result<bool>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        Message = "BookingReservation not found",
+                        Data = false
+                    };
+                }
+
+                bookingReservation.PaymentLinkId = paymentLinkId;
+                _context.BookingReservations.Update(bookingReservation);
+                await _context.SaveChangesAsync();
+                return new Result<bool>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = true
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating PaymentLinkId");
                 return new Result<bool>
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     Message = ex.Message,
+                    Data = false
+                };
+            }
+        }
+
+        public async Task<Result<bool>> UpdateBookingStatus(int bookingId, string status)
+        {
+            try
+            {
+                var bookingReservation = await _context.BookingReservations.FindAsync(bookingId);
+                if (bookingReservation == null)
+                {
+                    return new Result<bool>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        Message = "Booking reservation not found",
+                        Data = false
+                    };
+                }
+
+                bookingReservation.BookingStatus = status;
+                _context.BookingReservations.Update(bookingReservation);
+                await _context.SaveChangesAsync();
+                return new Result<bool>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = true
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating booking status");
+                return new Result<bool>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ex.Message,
+                    Data = false
                 };
             }
         }
@@ -360,6 +466,40 @@ namespace DataAccessObject
                     StatusCode = HttpStatusCode.BadRequest,
                     Message = ex.Message,
                     Data = false
+                };
+            }
+        }
+        public async Task<Result<BookingReservationEntity?>> GetDetailByPaymentLinkId(string paymentLinkId)
+        {
+            try
+            {
+                var bookingReservation = await _context.BookingReservations
+                    .FirstOrDefaultAsync(br => br.PaymentLinkId == paymentLinkId);
+
+                if (bookingReservation == null)
+                {
+                    return new Result<BookingReservationEntity?>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        Message = "Booking reservation not found",
+                        Data = null
+                    };
+                }
+
+                return new Result<BookingReservationEntity?>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = bookingReservation
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting booking reservation by payment link id");
+                return new Result<BookingReservationEntity?>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ex.Message,
+                    Data = null
                 };
             }
         }

@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using DTOs;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace DataAccessObject
@@ -47,5 +48,42 @@ namespace DataAccessObject
                 };
             }
         }
+
+        public async Task<Result<bool>> UpdateTransactionStatus(int bookingId, string status)
+        {
+            try
+            {
+                var transaction = await _context.Transactions
+                    .FirstOrDefaultAsync(t => t.BookingReservationId == bookingId);
+                if (transaction == null)
+                {
+                    return new Result<bool>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        Message = "Transaction not found",
+                        Data = false
+                    };
+                }
+
+                transaction.Status = status;
+                _context.Transactions.Update(transaction);
+                await _context.SaveChangesAsync();
+                return new Result<bool>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Result<bool>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ex.Message,
+                    Data = false
+                };
+            }
+        }
+
     }
 }

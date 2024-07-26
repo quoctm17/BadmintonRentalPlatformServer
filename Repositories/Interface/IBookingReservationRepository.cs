@@ -12,7 +12,7 @@ namespace Repositories.Interface
 {
     public interface IBookingReservationRepository
     {
-        Task<Result<bool>> Create(CreateBookingReservationRequest request);
+        Task<Result<int>> Create(CreateBookingReservationRequest request);
         Task<Result<bool>> Delete(int id);
         Task<Result<ICollection<BookingReservationViewModel>>> GetAll();
         Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request);
@@ -20,6 +20,13 @@ namespace Repositories.Interface
         public Task<Result<BookingReservationEntity?>> GetDetailOfBookingReservation(int bookingId);
         public Task<Result<List<BookingReservationEntity>>> GetAllBookingOfUser(int userId);
         Task<Result<bool>> CancelBooking(int bookingId);
+        Task<Result<bool>> UpdatePaymentLinkId(int bookingId, string paymentLinkId);
+        Task<Result<BookingReservationEntity?>> GetDetailByOrderCode(long orderCode);
+        Task<Result<bool>> UpdateTransactionStatus(int bookingId, string status);
+        Task<Result<bool>> UpdateBookingStatus(int bookingId, string status);
+        Task<Result<BookingReservationEntity?>> GetDetailByPaymentLinkId(string paymentLinkId);
+
+
     }
 
 }

@@ -33,5 +33,9 @@ namespace Services
             return await _repository.GetAllSlotByDateAndBadmintonCourt(badmintonCourtId, date);
         }
 
+        public async Task<Result<string>> CheckInSlotForUser(int courtSlotId)
+        {
+            return await _repository.CheckInForUser(courtSlotId);
+        }
     }
 }

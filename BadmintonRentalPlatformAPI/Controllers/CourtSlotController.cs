@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
 using DTOs.Response.CourtSlot;
 using DTOs.Request.CourtSlot;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BadmintonRentalPlatformAPI.Controllers
 {
@@ -45,6 +46,13 @@ namespace BadmintonRentalPlatformAPI.Controllers
         {
             var result = await _service.GetAllCourtSlotsByDateAndBadmintonCourt(badmintonCourtId, date);
             return StatusCode((int)result.StatusCode, result);
+        }
+
+        [HttpGet("check-in")]
+        public async Task<IActionResult> CheckinForUser(int courtSlotId)
+        {
+            var result = await _service.CheckInSlotForUser(courtSlotId);
+            return Ok(result);
         }
     }
 }

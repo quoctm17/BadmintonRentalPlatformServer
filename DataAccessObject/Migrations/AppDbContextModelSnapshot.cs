@@ -206,6 +206,9 @@ namespace DataAccessObject.Migrations
                     b.Property<int>("CourtId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CourtSlotStatus")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 

@@ -191,6 +191,7 @@ namespace DataAccessObject.Seed
                                         StartTime = startTime,
                                         EndTime = endTime,
                                         DateTime = date,
+                                        CourtSlotStatus = (int) CourtSlotStatusEnum.Booked,
                                         CourtId = courtDetail.Id // Cập nhật CourtId cho CourtSlotEntity
                                     });
                                 }

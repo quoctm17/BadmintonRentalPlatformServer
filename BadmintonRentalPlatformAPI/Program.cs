@@ -20,6 +20,7 @@ builder.Services.AddControllers()
 builder.Services.AddRepository();
 builder.Services.AddService();
 builder.Services.AddCloudinarySetting(builder.Configuration);
+builder.Services.AddJwtAuthorizationPolicy();
 builder.Services.AddAutoMapper();
 builder.Services.RegisterMapster();
 builder.Services.AddSeeding();

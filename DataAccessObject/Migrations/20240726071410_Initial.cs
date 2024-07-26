@@ -139,7 +139,6 @@ namespace DataAccessObject.Migrations
                     BadmintonCourtId = table.Column<int>(type: "int", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BookingStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalPrice = table.Column<float>(type: "real", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -217,7 +216,7 @@ namespace DataAccessObject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GrossAmount = table.Column<float>(type: "real", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentId = table.Column<int>(type: "int", nullable: false),
@@ -274,6 +273,7 @@ namespace DataAccessObject.Migrations
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CourtSlotStatus = table.Column<int>(type: "int", nullable: false),
                     CourtId = table.Column<int>(type: "int", nullable: false),
                     BookingDetailId = table.Column<int>(type: "int", nullable: false)
                 },

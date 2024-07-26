@@ -70,6 +70,11 @@ public static class DependencyInjection
         return services;
     }
 
+    public static IServiceCollection AddJwtAuthorizationPolicy(this IServiceCollection services)
+    {
+        return services;
+    }
+
     public static IServiceCollection AddAutoMapper(this IServiceCollection services)
     {
         //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

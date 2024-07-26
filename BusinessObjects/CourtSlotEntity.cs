@@ -11,6 +11,7 @@ namespace BusinessObjects
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public DateTime DateTime { get; set; }
+        public int CourtSlotStatus { get; set; }
         public int CourtId { get; set; }
         public int BookingDetailId { get; set; }
         public virtual BookingDetailEntity BookingDetail { get; set; }

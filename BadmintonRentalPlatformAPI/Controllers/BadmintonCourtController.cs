@@ -1,8 +1,10 @@
-﻿using BusinessObjects.Constants;
+﻿using System.Security.Claims;
+using BusinessObjects.Constants;
 using DTOs;
 using DTOs.Request.BadmintonCourt;
 using DTOs.Response.BadmintonCourt;
 using DTOs.Response.Page;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
@@ -71,6 +73,15 @@ namespace BadmintonRentalPlatformAPI.Controllers
         {
             var result = await _badmintonCourtService.GetPaging(page, size);
             return StatusCode((int)result.StatusCode, result);
+        }
+
+        [HttpPost("register-new-badminton-court")]
+        [Authorize(Policy = "Player")]
+        public async Task<IActionResult> RegisterNewBadmintonCourtForPlayer(CreateBadmintonCourtRequest request)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = Int32.Parse(identity.FindFirst("AccountId").Value);
+            return Ok();
         }
 
     }

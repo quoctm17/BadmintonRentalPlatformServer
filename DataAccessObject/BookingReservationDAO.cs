@@ -136,7 +136,8 @@ namespace DataAccessObject
                             StartTime = slot.StartTime,
                             EndTime = slot.EndTime,
                             DateTime = item.Date,
-                            CourtId = item.CourtId
+                            CourtId = item.CourtId,
+                            CourtSlotStatus = (int) CourtSlotStatusEnum.Booked
                         });
                     }
                 }
@@ -362,6 +363,15 @@ namespace DataAccessObject
                     Data = false
                 };
             }
+        }
+
+        public async Task CheckinForCourtSlot(int courtSlotId)
+        {
+            var courtSlot = await _context.CourtSlots
+                .FindAsync(courtSlotId);
+            courtSlot.CourtSlotStatus = (int)CourtSlotStatusEnum.CheckedIn;
+            _context.Attach(courtSlot).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
 

@@ -17,5 +17,7 @@ namespace Services.Interface
         public Task<Result<List<CourtSlotEntity>>> GetAllCourtSlots();
 
         public Task<Result<List<CourtSlotTimeDto>>> GetAllCourtSlotsByDateAndBadmintonCourt(int badmintonCourtId, DateTime date);
+
+        public Task<Result<string>> CheckInSlotForUser(int courtSlotId);
     }
 }

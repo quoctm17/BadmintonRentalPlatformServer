@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessObject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240726040410_UpdateBookingReservationDAO")]
-    partial class UpdateBookingReservationDAO
+    [Migration("20240726071410_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -207,6 +207,9 @@ namespace DataAccessObject.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("CourtId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourtSlotStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")

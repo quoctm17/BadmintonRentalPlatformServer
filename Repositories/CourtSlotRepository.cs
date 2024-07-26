@@ -36,5 +36,14 @@ namespace Repositories
             };
         }
 
+        public async Task<Result<string>> CheckInForUser(int courtSlotId)
+        {
+            await BookingReservationDAO.Instance.CheckinForCourtSlot(courtSlotId);
+            return new Result<string>()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = "Check in successful!"
+            };
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using BusinessObjects;
+using BusinessObjects.Enums;
+using BusinessObjects.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -151,77 +153,87 @@ namespace DataAccessObject.Seed
 
                 if (user != null && court != null)
                 {
-                    var bookingReservation = new BookingReservationEntity
-                    {
-                        UserId = user.Id,
-                        BadmintonCourtId = court.Id,
-                        CreateAt = DateTime.Now,
-                        BookingStatus = "Pending",
-                        PaymentStatus = "Pending",
-                        TotalPrice = 0,
-                        Notes = "Seed data booking",
-                        Transactions = new List<TransactionEntity>(),
-                        BookingDetails = new List<BookingDetailEntity>()
-                    };
-
                     var dates = new List<DateTime> { DateTime.Now, DateTime.Now.AddDays(1) };
                     var courtDetails = court.Courts.Take(2).ToList(); // Lấy 2 Court đầu tiên
 
-                    foreach (var date in dates)
+                    string[] bookingStatuses = { "PAYING", "BOOKED", "USED", "EXPIRED", "CANCELLED" };
+                    TransactionStatusEnum[] transactionStatuses = { TransactionStatusEnum.FAIL, TransactionStatusEnum.PENDING, TransactionStatusEnum.COMPLETE, TransactionStatusEnum.CANCEL };
+                    string[] paymentMethods = { "Cash", "Bank Transfer" };
+                    TransactionTypeEnum[] transactionTypes = { TransactionTypeEnum.Income, TransactionTypeEnum.Expense };
+
+                    for (int j = 0; j < bookingStatuses.Length; j++) // Tạo 5 BookingReservation với các trạng thái khác nhau
                     {
-                        foreach (var courtDetail in courtDetails)
+                        var bookingReservation = new BookingReservationEntity
                         {
-                            var courtSlots = new List<CourtSlotEntity>();
+                            UserId = user.Id,
+                            BadmintonCourtId = court.Id,
+                            CreateAt = DateTime.Now,
+                            BookingStatus = bookingStatuses[j],
+                            TotalPrice = 0,
+                            Notes = "Seed data booking",
+                            Transactions = new List<TransactionEntity>(),
+                            BookingDetails = new List<BookingDetailEntity>()
+                        };
 
-                            for (int i = 0; i < 3; i++) // Tạo 3 TimeSlot cho mỗi BookingDetail
+                        foreach (var date in dates)
+                        {
+                            foreach (var courtDetail in courtDetails)
                             {
-                                var startTime = new TimeSpan(7 + i * 2, 0, 0); // Mỗi slot cách nhau 2 giờ
-                                var endTime = startTime.Add(new TimeSpan(0, 30, 0)); // Thêm 30 phút vào StartTime
+                                var courtSlots = new List<CourtSlotEntity>();
 
-                                courtSlots.Add(new CourtSlotEntity
+                                for (int i = 0; i < 1; i++) // Tạo 1 TimeSlot cho mỗi BookingDetail
                                 {
-                                    StartTime = startTime,
-                                    EndTime = endTime,
-                                    DateTime = date,
-                                    CourtId = courtDetail.Id // Cập nhật CourtId cho CourtSlotEntity
-                                });
+                                    var startTime = new TimeSpan(7 + i * 2, 0, 0); // Mỗi slot cách nhau 2 giờ
+                                    var endTime = startTime.Add(new TimeSpan(0, 30, 0)); // Thêm 30 phút vào StartTime
+
+                                    courtSlots.Add(new CourtSlotEntity
+                                    {
+                                        StartTime = startTime,
+                                        EndTime = endTime,
+                                        DateTime = date,
+                                        CourtId = courtDetail.Id // Cập nhật CourtId cho CourtSlotEntity
+                                    });
+                                }
+
+                                var bookingDetail = new BookingDetailEntity
+                                {
+                                    CourtId = courtDetail.Id,
+                                    CourtEntity = courtDetail,
+                                    Price = courtDetail.Price * courtSlots.Count,
+                                    CourtSlots = courtSlots
+                                };
+
+                                bookingReservation.BookingDetails.Add(bookingDetail);
+                                bookingReservation.TotalPrice += bookingDetail.Price;
                             }
-
-                            var bookingDetail = new BookingDetailEntity
-                            {
-                                CourtId = courtDetail.Id,
-                                CourtEntity = courtDetail,
-                                Price = courtDetail.Price * courtSlots.Count,
-                                CourtSlots = courtSlots
-                            };
-
-                            bookingReservation.BookingDetails.Add(bookingDetail);
-                            bookingReservation.TotalPrice += bookingDetail.Price;
                         }
-                    }
 
-                    await _context.BookingReservations.AddAsync(bookingReservation);
-                    await _context.SaveChangesAsync();
+                        await _context.BookingReservations.AddAsync(bookingReservation);
+                        await _context.SaveChangesAsync();
 
-                    // Seed Transactions
-                    var payment = await _context.Payments.FirstOrDefaultAsync(p => p.PaymentMethod == "Cash");
-                    if (payment != null)
-                    {
+                        // Seed Transactions
+                        var randomTransactionStatus = transactionStatuses[j % transactionStatuses.Length].GetDescriptionFromEnum();
+                        var randomPaymentMethod = paymentMethods[j % paymentMethods.Length];
+                        var randomTransactionType = transactionTypes[j % transactionTypes.Length];
+
                         var transaction = new TransactionEntity
                         {
                             GrossAmount = bookingReservation.TotalPrice,
-                            Type = "Payment",
+                            Type = randomTransactionType,
                             CreateAt = DateTime.Now,
-                            Status = "Success",
-                            PaymentId = payment.Id,
+                            Status = randomTransactionStatus,
+                            PaymentId = (await _context.Payments.FirstOrDefaultAsync(p => p.PaymentMethod == randomPaymentMethod)).Id,
                             BookingReservationId = bookingReservation.Id // Liên kết với BookingReservation
                         };
+
                         await _context.Transactions.AddAsync(transaction);
                         await _context.SaveChangesAsync();
                     }
                 }
             }
         }
+
+
 
     }
 }

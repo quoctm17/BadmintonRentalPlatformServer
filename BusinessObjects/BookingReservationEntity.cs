@@ -18,7 +18,6 @@ namespace BusinessObjects
         public UserEntity User { get; set; }
         public DateTime CreateAt { get; set; }
         public string BookingStatus { get; set; }
-        public string PaymentStatus { get; set; }
         public float TotalPrice { get; set; }
         public string Notes { get; set; }
         public ICollection<TransactionEntity> Transactions { get; set; }

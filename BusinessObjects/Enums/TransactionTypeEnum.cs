@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Enums
 {
-    public enum PaymentStatusEnum
+    public enum TransactionTypeEnum
     {
-        AVAILABLE,
-        UNAVAILABLE
+        Income,
+        Expense
     }
 }

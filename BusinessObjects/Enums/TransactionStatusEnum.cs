@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Enums
 {
-    public enum PaymentStatusEnum
+    public enum TransactionStatusEnum
     {
-        AVAILABLE,
-        UNAVAILABLE
+        FAIL,
+        PENDING,
+        COMPLETE,
+        CANCEL
     }
 }

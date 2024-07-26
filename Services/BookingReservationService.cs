@@ -40,5 +40,9 @@ namespace Services
         {
             return await _repository.GetAllBookingOfUser(userId);
         }
+        public async Task<Result<bool>> CancelBooking(int bookingId)
+        {
+            return await _repository.CancelBooking(bookingId);
+        }
     }
 }

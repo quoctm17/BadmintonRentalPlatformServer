@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using BusinessObjects.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObjects
 {
@@ -6,7 +7,7 @@ namespace BusinessObjects
     {
         public int Id { get; set; }
         public float GrossAmount { get; set; }
-        public string Type { get; set; }
+        public TransactionTypeEnum Type { get; set; } // "Income" hoặc "Expense"
         public DateTime CreateAt { get; set; }
         public string Status { get; set; }
         public int PaymentId { get; set; }

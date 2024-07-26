@@ -29,4 +29,28 @@ public class BookingDetailDAO
     {
         return await _context.BookingDetails.ToListAsync();
     }
+
+    public async Task<List<BookingDetailEntity>> GetBookingDetailsByReservationId(int bookingReservationId)
+    {
+        return await _context.BookingDetails
+            .Where(b => b.BookingId == bookingReservationId)
+            .Include(b => b.CourtEntity)
+            .Select(b => new BookingDetailEntity
+            {
+                Id = b.Id,
+                BookingId = b.BookingId,
+                CourtId = b.CourtId,
+                Price = b.Price,
+                CourtEntity = new CourtEntity
+                {
+                    Id = b.CourtEntity.Id,
+                    CourtCode = b.CourtEntity.CourtCode,
+                    TypeOfCourtId = b.CourtEntity.TypeOfCourtId,
+                    BadmintonCourtId = b.CourtEntity.BadmintonCourtId,
+                    Price = b.CourtEntity.Price,
+                    CourtImage = b.CourtEntity.CourtImage
+                }
+            })
+            .ToListAsync();
+    }
 }

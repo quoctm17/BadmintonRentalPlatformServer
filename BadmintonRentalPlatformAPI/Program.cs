@@ -12,7 +12,11 @@ var configuration = builder.Configuration.Get<AppConfig>() ?? new AppConfig();
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
 builder.Services.AddRepository();
 builder.Services.AddService();
 builder.Services.AddCloudinarySetting(builder.Configuration);

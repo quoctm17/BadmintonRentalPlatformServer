@@ -13,5 +13,6 @@ namespace BusinessObjects.Enums
         USED,
         EXPIRED,
         CANCELLED,
+        REFUND
     }
 }

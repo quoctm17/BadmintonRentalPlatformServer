@@ -19,5 +19,6 @@ namespace Services.Interface
         public Task<Result<List<BookingDetailEntity>>> GetAllBookingDetails();
         public Task<Result<BookingReservationEntity?>> GetDetail(int bookingId);
         public Task<Result<List<BookingReservationEntity>>> GetAllBookingReservationOfUser(int userId);
+        Task<Result<bool>> CancelBooking(int bookingId);
     }
 }

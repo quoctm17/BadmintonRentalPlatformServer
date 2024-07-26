@@ -1,33 +1,28 @@
 ﻿using BusinessObjects.Constants;
 using BusinessObjects.Exceptions;
 using BusinessObjects;
-using DTOs.Request.CourtSlot;
-using DTOs.Response.CourtSlot;
 using DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using DTOs.Request.BookingReservation;
 using Microsoft.EntityFrameworkCore;
 using DTOs.Response.BookingReservation;
 using Mapster;
 using BusinessObjects.Enums;
 using BusinessObjects.Helpers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccessObject
 {
     public class BookingReservationDAO
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<BookingReservationDAO> _logger; // Thêm logger
         private static BookingReservationDAO instance;
 
-        public BookingReservationDAO()
+        public BookingReservationDAO(ILogger<BookingReservationDAO> logger)
         {
             _context = new AppDbContext();
+            _logger = logger;
         }
 
         public static BookingReservationDAO Instance
@@ -36,13 +31,17 @@ namespace DataAccessObject
             {
                 if (instance == null)
                 {
-                    instance = new BookingReservationDAO();
+                    // Thêm logger vào instance
+                    var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                    var logger = loggerFactory.CreateLogger<BookingReservationDAO>();
+                    instance = new BookingReservationDAO(logger);
                 }
                 return instance;
             }
         }
         public async Task<Result<bool>> Create(CreateBookingReservationRequest request)
         {
+            _logger.LogInformation("CreateBookingReservationRequest: {@Request}", request); // Log request
             try
             {
                 var existingCourtIds = await _context.Courts.Select(c => c.Id).ToListAsync();
@@ -50,6 +49,7 @@ namespace DataAccessObject
                 {
                     if (!existingCourtIds.Contains(bookingCourt.CourtId))
                     {
+                        _logger.LogWarning("Court with ID {CourtId} does not exist.", bookingCourt.CourtId); // Log cảnh báo
                         return new Result<bool>
                         {
                             StatusCode = HttpStatusCode.BadRequest,
@@ -62,7 +62,6 @@ namespace DataAccessObject
                 BookingReservationEntity bookingReservationEntity = new BookingReservationEntity()
                 {
                     BookingStatus = BookingStatusEnum.PAYING.GetDescriptionFromEnum(),
-                    PaymentStatus = PaymentStatusEnum.PENDING.GetDescriptionFromEnum(),
                     UserId = request.UserId,
                     Notes = request.Notes,
                     CreateAt = DateTime.Now,
@@ -78,6 +77,7 @@ namespace DataAccessObject
                     var court = await _context.Courts.FindAsync(item.CourtId);
                     if (court == null)
                     {
+                        _logger.LogWarning("Court with ID {CourtId} does not exist.", item.CourtId); // Log cảnh báo
                         return new Result<bool>
                         {
                             StatusCode = HttpStatusCode.BadRequest,
@@ -105,6 +105,7 @@ namespace DataAccessObject
                         // Kiểm tra điều kiện EndTime cách StartTime 30 phút
                         if ((slot.EndTime - slot.StartTime).TotalMinutes != 30)
                         {
+                            _logger.LogWarning("EndTime must be 30 minutes after StartTime."); // Log cảnh báo
                             return new Result<bool>
                             {
                                 StatusCode = HttpStatusCode.BadRequest,
@@ -119,6 +120,8 @@ namespace DataAccessObject
 
                         if (isSlotBooked)
                         {
+                            _logger.LogWarning("Time slot from {StartTime} to {EndTime} for court ID {CourtId} on date {Date} is already booked.",
+                                slot.StartTime, slot.EndTime, slot.CourtId, item.Date.ToShortDateString()); // Log cảnh báo
                             return new Result<bool>
                             {
                                 StatusCode = HttpStatusCode.BadRequest,
@@ -140,18 +143,21 @@ namespace DataAccessObject
 
                 _context.ChangeTracker.Clear();
                 await _context.BookingReservations.AddAsync(bookingReservationEntity);
+                await _context.SaveChangesAsync(); // Lưu bookingReservationEntity trước
+
                 await _context.BookingDetails.AddRangeAsync(bookingDetails);
                 await _context.CourtSlots.AddRangeAsync(slots);
                 await _context.Transactions.AddAsync(new TransactionEntity()
                 {
                     CreateAt = DateTime.Now,
-                    Status = PaymentStatusEnum.PENDING.GetDescriptionFromEnum(),
-                    BookingReservationId = bookingReservationEntity.Id,
-                    Type = "PayOS",
+                    Status = TransactionStatusEnum.PENDING.GetDescriptionFromEnum(),
+                    BookingReservationId = bookingReservationEntity.Id, // Sử dụng ID đã lưu
+                    Type = TransactionTypeEnum.Income, // Default to Income
                     GrossAmount = bookingReservationEntity.TotalPrice,
                     PaymentId = request.PaymentId
                 });
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("BookingReservation created successfully."); // Log thành công
                 return new Result<bool>
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -161,6 +167,7 @@ namespace DataAccessObject
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error creating BookingReservation"); // Log lỗi
                 return new Result<bool>
                 {
                     StatusCode = HttpStatusCode.BadRequest,
@@ -168,7 +175,6 @@ namespace DataAccessObject
                 };
             }
         }
-
 
 
         public async Task<Result<ICollection<BookingReservationViewModel>>> GetAll()
@@ -209,7 +215,6 @@ namespace DataAccessObject
                 request.Adapt(bookingReservation);
 
                 bookingReservation.BookingStatus = request.BookingStatus.GetDescriptionFromEnum();
-                bookingReservation.PaymentStatus = request.PaymentStatus.GetDescriptionFromEnum();
 
                 _context.BookingReservations.Update(bookingReservation);
                 bool isSuccessful = await _context.SaveChangesAsync() > 0;
@@ -282,7 +287,84 @@ namespace DataAccessObject
         {
             return await _context.BookingReservations
                 .Where(booking => booking.UserId == userId)
+                .Include(booking => booking.Transactions)
+                    .ThenInclude(transaction => transaction.Payment)
                 .ToListAsync();
         }
+        public async Task<Result<bool>> CancelBooking(int bookingId)
+        {
+            try
+            {
+                var bookingReservation = await _context.BookingReservations
+                    .Include(br => br.Transactions)
+                    .SingleOrDefaultAsync(br => br.Id == bookingId)
+                    ?? throw new BadRequestException("Booking reservation not found.");
+
+                if (bookingReservation.BookingStatus == BookingStatusEnum.CANCELLED.GetDescriptionFromEnum() ||
+                    bookingReservation.BookingStatus == BookingStatusEnum.EXPIRED.GetDescriptionFromEnum() ||
+                    bookingReservation.BookingStatus == BookingStatusEnum.USED.GetDescriptionFromEnum())
+                {
+                    return new Result<bool>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = "Cannot cancel this booking reservation.",
+                        Data = false
+                    };
+                }
+
+                if (bookingReservation.BookingStatus == BookingStatusEnum.PAYING.GetDescriptionFromEnum())
+                {
+                    bookingReservation.BookingStatus = BookingStatusEnum.CANCELLED.GetDescriptionFromEnum();
+                }
+                else if (bookingReservation.BookingStatus == BookingStatusEnum.BOOKED.GetDescriptionFromEnum())
+                {
+                    var transaction = bookingReservation.Transactions.OrderByDescending(t => t.CreateAt).FirstOrDefault();
+                    if (transaction != null)
+                    {
+                        if (transaction.Payment.PaymentMethod == "Cash")
+                        {
+                            bookingReservation.BookingStatus = BookingStatusEnum.CANCELLED.GetDescriptionFromEnum();
+                        }
+                        else if (transaction.Payment.PaymentMethod == "Bank Transfer")
+                        {
+                            if (transaction.Status == TransactionStatusEnum.COMPLETE.GetDescriptionFromEnum())
+                            {
+                                bookingReservation.BookingStatus = BookingStatusEnum.REFUND.GetDescriptionFromEnum();
+                            }
+                            else
+                            {
+                                bookingReservation.BookingStatus = BookingStatusEnum.CANCELLED.GetDescriptionFromEnum();
+                            }
+                        }
+                    }
+                }
+
+                _context.BookingReservations.Update(bookingReservation);
+                bool isSuccessful = await _context.SaveChangesAsync() > 0;
+
+                if (!isSuccessful)
+                {
+                    throw new Exception("Failed to cancel booking reservation.");
+                }
+
+                return new Result<bool>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Data = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Result<bool>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ex.Message,
+                    Data = false
+                };
+            }
+        }
+
+
+
     }
 }

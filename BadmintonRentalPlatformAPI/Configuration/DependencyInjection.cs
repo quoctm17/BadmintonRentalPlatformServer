@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<ICourtSlotRepository, CourtSlotRepository>();
         services.AddScoped<IBookingReservationRepository, BookingReservationRepository>();
         services.AddScoped<IPaymentRepository, PaymentRepository>();
+        services.AddScoped<IBookingDetailRepository, BookingDetailRepository>();
         return services;
     }
 
@@ -36,6 +37,7 @@ public static class DependencyInjection
         services.AddScoped<IBookingReservationService, BookingReservationService>();
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IBookingDetailService, BookingDetailService>();
         return services;
     }
 

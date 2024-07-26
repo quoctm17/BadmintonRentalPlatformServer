@@ -48,5 +48,9 @@ namespace Repositories
                 Data = await BookingReservationDAO.Instance.GetAllBookingReservationOfUser(userId)
             };
         }
+        public async Task<Result<bool>> CancelBooking(int bookingId)
+        {
+            return await BookingReservationDAO.Instance.CancelBooking(bookingId);
+        }
     }
 }

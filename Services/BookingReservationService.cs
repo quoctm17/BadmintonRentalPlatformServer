@@ -22,7 +22,7 @@ namespace Services
             _repository = repository;
         }
 
-        public Task<Result<bool>> Create(CreateBookingReservationRequest request) => _repository.Create(request);
+        public Task<Result<int>> Create(CreateBookingReservationRequest request) => _repository.Create(request);
         public Task<Result<bool>> Delete(int id) => _repository.Delete(id);
         public Task<Result<ICollection<BookingReservationViewModel>>> GetAll() => _repository.GetAll();
         public Task<Result<bool>> Update(int id, UpdateBookingReservationRequest request) => _repository.Update(id, request);
@@ -44,5 +44,30 @@ namespace Services
         {
             return await _repository.CancelBooking(bookingId);
         }
+
+        public async Task<Result<bool>> UpdatePaymentLinkId(int bookingId, string paymentLinkId)
+        {
+            return await _repository.UpdatePaymentLinkId(bookingId, paymentLinkId);
+        }
+
+        public async Task<Result<BookingReservationEntity?>> GetDetailByOrderCode(long orderCode)
+        {
+            return await _repository.GetDetailByOrderCode(orderCode);
+        }
+
+        public async Task<Result<bool>> UpdateTransactionStatus(int bookingId, string status)
+        {
+            return await _repository.UpdateTransactionStatus(bookingId, status);
+        }
+
+        public async Task<Result<bool>> UpdateBookingStatus(int bookingId, string status)
+        {
+            return await _repository.UpdateBookingStatus(bookingId, status);
+        }
+        public async Task<Result<BookingReservationEntity?>> GetDetailByPaymentLinkId(string paymentLinkId)
+        {
+            return await _repository.GetDetailByPaymentLinkId(paymentLinkId);
+        }
+
     }
 }

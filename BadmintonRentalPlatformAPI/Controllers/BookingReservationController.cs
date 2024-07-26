@@ -21,15 +21,16 @@ namespace BadmintonRentalPlatformAPI.Controllers
         }
 
         [HttpPost(ApiEndPointConstant.BookingReservation.BookingReservationsEndpoint)]
-        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<int>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateBookingReservationRequest request)
         {
             _logger.LogInformation("CreateBookingReservationRequest: {@Request}", request);
-            Result<bool> result = await _service.Create(request);
+            Result<int> result = await _service.Create(request);
             _logger.LogInformation("CreateBookingReservationResponse: {@Result}", result);
             return StatusCode((int)result.StatusCode, result);
         }
+
 
 
         [HttpDelete(ApiEndPointConstant.BookingReservation.BookingReservationEndpoint)]

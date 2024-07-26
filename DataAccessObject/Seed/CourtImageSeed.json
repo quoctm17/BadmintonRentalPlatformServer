@@ -1,48 +1,48 @@
 [
   {
-    "ImagePath": "/img/room/room-b1.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": true,
     "IsBackground": false,
     "BadmintonCourtId": 1
   },
   {
-    "ImagePath": "/img/room/room-b2.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": false,
     "IsBackground": true,
     "BadmintonCourtId": 1
   },
   {
-    "ImagePath": "/img/room/room-b3.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": false,
     "IsBackground": false,
     "BadmintonCourtId": 2
   },
   {
-    "ImagePath": "/img/room/room-b4.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": true,
     "IsBackground": false,
     "BadmintonCourtId": 2
   },
   {
-    "ImagePath": "/img/room/room-b1.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": false,
     "IsBackground": true,
     "BadmintonCourtId": 3
   },
   {
-    "ImagePath": "/img/room/room-b2.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": false,
     "IsBackground": false,
     "BadmintonCourtId": 3
   },
   {
-    "ImagePath": "/img/room/room-b3.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": true,
     "IsBackground": false,
     "BadmintonCourtId": 4
   },
   {
-    "ImagePath": "/img/room/room-b4.jpg",
+    "ImagePath": "https://thethao365.com.vn/Data/upload/images/Product/Caulong/kich-thuoc-san-cau-long.jpg",
     "IsMainCarousel": false,
     "IsBackground": true,
     "BadmintonCourtId": 4

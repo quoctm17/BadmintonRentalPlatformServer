@@ -140,7 +140,8 @@ namespace DataAccessObject.Migrations
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BookingStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalPrice = table.Column<float>(type: "real", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentLinkId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

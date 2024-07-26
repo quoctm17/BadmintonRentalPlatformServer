@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessObject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240726071410_Initial")]
+    [Migration("20240726082031_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -116,6 +116,9 @@ namespace DataAccessObject.Migrations
 
                     b.Property<string>("Notes")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentLinkId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("TotalPrice")
